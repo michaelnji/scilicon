@@ -2,6 +2,9 @@
   import TodayStats from "./../_components/todayStats.svelte";
   import Product from "./../_components/Product.svelte";
   import AddItem from "./../../../_components/AddItem.svelte";
+  import { metatags } from "@roxi/routify";
+
+  metatags.title = "Overview";
 </script>
 
 <AddItem />

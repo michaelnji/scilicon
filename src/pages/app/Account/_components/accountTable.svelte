@@ -1,4 +1,5 @@
 <script>
+  import Icon from "./../../../../_components/icon.svelte";
 </script>
 
 <div class=" max-w-full  overflow-x-auto ">
@@ -12,7 +13,11 @@
     </thead>
     <tbody>
       <tr>
-        <td class=" text-xs sm:text-base">bread</td>
+        <td class=" text-xs sm:text-base flex items-center"
+          >bread <button class="btn btn-ghost btn-sm ml-4"
+            ><Icon name="check" /></button
+          ></td
+        >
         <td class="text-xs sm:text-base">300frs</td>
         <td class="text-xs sm:text-base">09/10/21</td>
       </tr>
@@ -36,7 +41,14 @@
         <td class="text-xs sm:text-base">300frs</td>
         <td class="text-xs sm:text-base">09/10/21</td>
       </tr>
+      <tr />
     </tbody>
+
+    <tr>
+      <td class=" text-xs sm:text-base font-extrabold">TOTAL</td>
+      <td class="text-xs sm:text-base" />
+      <td class="text-sm sm:text-xl text-primary font-extrabold">2.000fcfa</td>
+    </tr>
   </table>
 </div>
 
