@@ -45,7 +45,7 @@
     "sass": "^1.38.1",
     "spank": "^1.7.0",
     "spassr": "^2.6.0",
-    "svelte": "^3.38.2",
+    "svelte": "^3.42.6",
     "svelte-preprocess": "^4.8.0",
     "tailwindcss": "^2.2.7",
     "tossr": "^1.4.2"
@@ -62,8 +62,10 @@
   "dependencies": {
     "chart.js": "^3.5.1",
     "daisyui": "^1.13.2",
+    "frappe-charts": "^1.6.2",
     "praecox-datepicker": "^1.1.6",
     "s-offline": "^0.3.0",
+    "svelte-frappe-charts": "^1.9.0",
     "uuidv4": "^6.2.12"
   }
 }

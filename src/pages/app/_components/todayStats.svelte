@@ -3,7 +3,7 @@
 </script>
 
 <div class=" grid-flow-row lg:grid-flow-col md:w-full shadow stats bg-base-100">
-  <div class="stat  border-r border-gray-700">
+  <div class="stat  border-r ">
     <div class="stat-figure text-secondary">
       <Icon name="globe" />
     </div>
