@@ -8,7 +8,7 @@
 
 <AddItem />
 <h1 class="text-base-content md:text-4xl text-2xl font-bold mb-10">Products</h1>
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-y-8 lg:gap-x-8 lg:gap-y-0">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 lg:gap-x-8 lg:gap-y-0">
   <div>
     <h2 class="text-base-content md:text-2xl text-xl font-bold text-opacity-80">
       Fixed
