@@ -1,7 +1,8 @@
 <script>
+  import tf from "../scripts/timeFunctions";
 </script>
 
-<p class="capitalize text-sm md:text-lg font-semibold">Mon, 12 aug 2021</p>
+<p class="capitalize text-sm md:text-lg font-semibold">{tf.today()}</p>
 
 <style>
 </style>

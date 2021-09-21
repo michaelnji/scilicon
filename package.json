@@ -27,6 +27,7 @@
     "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@roxi/routify": "^2.18.1",
+    "@types/luxon": "^2.0.4",
     "autoprefixer": "^10.3.2",
     "cross-env": "^7.0.3",
     "cssnano": "^5.0.8",
@@ -63,9 +64,11 @@
     "chart.js": "^3.5.1",
     "daisyui": "^1.13.2",
     "frappe-charts": "^1.6.2",
+    "luxon": "^2.0.2",
     "praecox-datepicker": "^1.1.6",
     "s-offline": "^0.3.0",
     "svelte-frappe-charts": "^1.9.0",
+    "underscore": "^1.13.1",
     "uuidv4": "^6.2.12"
   }
 }

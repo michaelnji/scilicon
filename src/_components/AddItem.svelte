@@ -1,7 +1,9 @@
 <script>
+  import AddProduct from "./../pages/app/_components/addProduct.svelte";
   import Icon from "./icon.svelte";
 </script>
 
+<AddProduct isOpen={true} />
 <div
   class="dropdown dropdown-top  max-w-max fixed bottom-8 md:right-12 right-6 z-50"
 >
