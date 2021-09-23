@@ -1,12 +1,12 @@
 <script>
+  import AddProduct from "./../_components/addProduct.svelte";
   import ProductCard from "./_components/productCard.svelte";
-  import AddItem from "./../../../_components/AddItem.svelte";
   import { metatags } from "@roxi/routify";
 
   metatags.title = "Products";
 </script>
 
-<AddItem />
+<AddProduct />
 <h1 class="text-base-content md:text-4xl text-2xl font-bold mb-10">Products</h1>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 lg:gap-x-8 lg:gap-y-0">
   <div>
@@ -20,7 +20,7 @@
       <ProductCard
         productName="Sardine"
         totalPrice="200"
-        amtSold="5"
+        amtInStock="5"
         unitPrice="100"
         grossPercentage="10"
         unitName="spoons"
@@ -29,7 +29,7 @@
         productName="bread"
         totalPrice="800"
         unitPrice="100"
-        amtSold="8"
+        amtInStock="8"
         grossPercentage="80"
         unitName="pieces"
       />
@@ -37,14 +37,14 @@
         productName="butter"
         totalPrice="100"
         unitPrice="100"
-        amtSold="2"
+        amtInStock="2"
         grossPercentage="30"
         unitName="spoons"
       />
       <ProductCard
         productName="chocolate"
         totalPrice="200"
-        amtSold="8"
+        amtInStock="8"
         unitPrice="100"
         grossPercentage="80"
         unitName="spoons"
@@ -60,7 +60,7 @@
       <ProductCard
         productName="Sardine"
         totalPrice="200"
-        amtSold="5"
+        amtInStock="5"
         unitPrice="100"
         grossPercentage="10"
         unitName="spoons"
@@ -69,7 +69,7 @@
         productName="bread"
         totalPrice="800"
         unitPrice="100"
-        amtSold="8"
+        amtInStock="8"
         grossPercentage="80"
         unitName="pieces"
       />
@@ -77,14 +77,14 @@
         productName="butter"
         totalPrice="100"
         unitPrice="100"
-        amtSold="2"
+        amtInStock="2"
         grossPercentage="30"
         unitName="spoons"
       />
       <ProductCard
         productName="chocolate"
         totalPrice="200"
-        amtSold="8"
+        amtInStock="8"
         unitPrice="100"
         grossPercentage="80"
         unitName="spoons"

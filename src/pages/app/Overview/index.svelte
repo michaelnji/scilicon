@@ -1,13 +1,11 @@
 <script>
   import TodayStats from "./../_components/todayStats.svelte";
   import Product from "./../_components/Product.svelte";
-  import AddItem from "./../../../_components/AddItem.svelte";
   import { metatags } from "@roxi/routify";
 
   metatags.title = "Overview";
 </script>
 
-<AddItem />
 <h1 class="text-base-content md:text-4xl text-2xl font-bold mb-10">Overview</h1>
 <h2 class="text-base-content md:text-2xl text-xl font-bold text-opacity-80">
   Products

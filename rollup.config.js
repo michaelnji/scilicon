@@ -60,7 +60,6 @@ export default {
       preprocess: [
         autoPreprocess({
           postcss: require("./postcss.config.js"),
-          defaults: { style: "postcss" },
         }),
       ],
     }),

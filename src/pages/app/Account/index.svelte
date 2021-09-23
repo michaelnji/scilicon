@@ -1,4 +1,5 @@
 <script>
+  import AddAccount from "./_components/addAccount.svelte";
   import Icon from "./../../../_components/icon.svelte";
   import AccountTable from "./_components/accountTable.svelte";
   import { metatags } from "@roxi/routify";
@@ -6,6 +7,7 @@
   metatags.title = "Accounts";
 </script>
 
+<AddAccount />
 <h1 class="text-base-content md:text-4xl text-2xl font-bold mb-10">Accounts</h1>
 
 <div class="mb-16">

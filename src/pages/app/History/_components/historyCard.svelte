@@ -1,7 +1,6 @@
 <script>
+  import Chart from "./../../../../_components/chart.svelte";
   import Icon from "./../../../../_components/icon.svelte";
-  import { Chart } from "frappe-charts/dist/frappe-charts.min.esm";
-  import { onMount } from "svelte";
   export let productName,
     values,
     totalPrice,
@@ -11,27 +10,16 @@
     id,
     color,
     unitName;
-  onMount(() => {
-    console.log(document.querySelector("div.bg-red-800"));
-    const data = {
-      labels: ["week 1", "week 2", "week 3", "week 4"],
-      datasets: [
-        {
-          name: "pieces of bread",
-          type: "line",
-          values: values,
-        },
-      ],
-    };
-
-    const chart = new Chart(`#chart-${id}`, {
-      title: "Sales chart for october",
-      data: data,
-      type: "bar", // or 'bar', 'line', 'scatter', 'pie', 'percentage'
-      height: 250,
-      colors: [color],
-    });
-  });
+  const data = {
+    labels: ["week 1", "week 2", "week 3", "week 4"],
+    datasets: [
+      {
+        name: "pieces of bread",
+        type: "bar",
+        values: values,
+      },
+    ],
+  };
 </script>
 
 <div class="bg-base-100 rounded-box mx-2 my-2 shadow-lg px-6 py-4">
@@ -57,7 +45,14 @@
       {totalUnits}
       <span class="text-base-content  text-xl">{unitName} sold </span>
     </h2>
-    <div id={`chart-${id}`} />
+    <Chart
+      {id}
+      title={"sales for october"}
+      {color}
+      {data}
+      type={"bar"}
+      height={250}
+    />
     <div class="flex justify-between mt-8">
       <div>
         <h2
