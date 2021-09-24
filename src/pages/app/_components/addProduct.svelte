@@ -1,16 +1,67 @@
 <script>
+  import products from "./../../../store/products.js";
   import Icon from "./../../../_components/icon.svelte";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
-
-  const id = "addproduct";
+  import { v4 as uuidv4 } from "uuid";
+  import timeFunctions from "../../../scripts/timeFunctions";
+  import dbManager from "../../../scripts/dbManager";
+  let productName,
+    productId,
+    productAmt,
+    productUnitPrice,
+    productUnitName,
+    isProductMeasurable,
+    productCreationDate,
+    productCP,
+    productSP,
+    productProjectedGain,
+    Products,
+    subscribe;
+  onMount(() => {
+    subscribe = products.subscribe((value) => {
+      Products = value;
+    });
+  });
+  onDestroy(() => {
+    subscribe;
+  });
   let isOpen = false;
   const dispatch = createEventDispatcher();
   function closeModal() {
     isOpen = !isOpen;
   }
   function triggerSuccessEvent() {
-    // on add product
+    productId = uuidv4();
+    // FIXME : change format of date to : dd/mm/yyyy
+    productCreationDate = timeFunctions.today();
+    productSP = productAmt * productUnitPrice;
+    productProjectedGain = productSP - productCP;
+    let finalProduct = {
+      name: productName,
+      costPrice: productCP,
+      sellingPrice: productSP,
+      grossGain: productProjectedGain,
+      creationDate: productCreationDate,
+      id: productId,
+      amount: productAmt,
+      initialStock: productAmt,
+      totalSold: 0,
+      amtLeftForSale: productAmt,
+      unitName: productUnitName,
+      unitPrice: productUnitPrice,
+      isMeasurable: isProductMeasurable ? isProductMeasurable : false,
+    };
+    products.update((value) => {
+      return dbManager.setItemValue("SC_PRODUCTS", [finalProduct, ...Products]);
+    });
+    //  resetting data
+    productName = "";
+    productAmt = "";
+    productUnitName = "";
+    productUnitPrice = "";
+    isProductMeasurable = false;
+    productCP = "";
     closeModal();
   }
   function triggerCancelEvent() {
@@ -51,9 +102,22 @@
           </label>
           <input
             placeholder="fish"
+            bind:value={productName}
             name="product name"
             class="input input-bordered"
             type="text"
+          />
+        </div>
+        <div class="form-control">
+          <label class="label" for="product cost price">
+            <span class="label-text">Product Cost Price (FCFA)</span>
+          </label>
+          <input
+            placeholder="6000"
+            bind:value={productCP}
+            name="product cost price"
+            class="input input-bordered"
+            type="number"
           />
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-0 gap-y-3 md:gap-x-2">
@@ -63,20 +127,22 @@
             </label>
             <input
               placeholder="00"
+              bind:value={productAmt}
               name="Amount"
               class="input input-bordered"
-              type="text"
+              type="number"
             />
           </div>
           <div class="form-control">
             <label class="label" for="unit price">
-              <span class="label-text">Unit Price</span>
+              <span class="label-text">Unit Price (FCFA)</span>
             </label>
             <input
-              placeholder="10FCFA"
-              name="unit price"
+              placeholder="10"
+              name="unit price "
+              bind:value={productUnitPrice}
               class="input input-bordered"
-              type="text"
+              type="number"
             />
           </div>
           <div class="form-control">
@@ -84,6 +150,7 @@
               <span class="label-text">Unit Name</span>
             </label>
             <input
+              bind:value={productUnitName}
               placeholder="pieces"
               name="unit name"
               class="input input-bordered"
@@ -98,7 +165,7 @@
                 </span>
                 <input
                   type="checkbox"
-                  checked="checked"
+                  bind:checked={isProductMeasurable}
                   class="toggle toggle-primary mr-auto ml-8"
                 />
               </label>

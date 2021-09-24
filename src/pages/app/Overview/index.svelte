@@ -1,6 +1,6 @@
 <script>
+  import ProductList from "./_components/productList.svelte";
   import TodayStats from "./../_components/todayStats.svelte";
-  import Product from "./../_components/Product.svelte";
   import { metatags } from "@roxi/routify";
 
   metatags.title = "Overview";
@@ -11,36 +11,7 @@
   Products
 </h2>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4">
-  <Product
-    productName="Sardine"
-    totalPrice="200"
-    totalUnits="5"
-    grossPercentage="10"
-    unitName="spoons"
-  />
-  <Product
-    productName="bread"
-    totalPrice="800"
-    totalUnits="8"
-    grossPercentage="80"
-    unitName="pieces"
-  />
-  <Product
-    productName="butter"
-    totalPrice="100"
-    totalUnits="2"
-    grossPercentage="30"
-    unitName="spoons"
-  />
-  <Product
-    productName="chocolate"
-    totalPrice="200"
-    totalUnits="8"
-    grossPercentage="80"
-    unitName="spoons"
-  />
-</div>
+<ProductList />
 <h2
   class="text-base-content md:text-2xl text-xl font-bold  mt-8 text-opacity-80 capitalize"
 >

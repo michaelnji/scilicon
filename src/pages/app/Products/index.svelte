@@ -2,7 +2,45 @@
   import AddProduct from "./../_components/addProduct.svelte";
   import ProductCard from "./_components/productCard.svelte";
   import { metatags } from "@roxi/routify";
-
+  import { onDestroy, onMount } from "svelte";
+  import products from "./../../../store/products.js";
+  import db from "../../../../../avecas/src/scripts/dbManager";
+  let currentProducts,
+    totalProducts,
+    grossGain,
+    totalSales,
+    isMeasurableProducts,
+    nonMeasurableProducts,
+    subscribe;
+  currentProducts = [];
+  isMeasurableProducts = [];
+  nonMeasurableProducts = [];
+  onMount(() => {
+    products.update((value) => {
+      return db.getItemValue("SC_PRODUCTS");
+    });
+    subscribe = products.subscribe((value) => {
+      currentProducts = value;
+    });
+  });
+  onDestroy(() => {
+    subscribe;
+  });
+  $: {
+    if (currentProducts) {
+      isMeasurableProducts = [];
+      nonMeasurableProducts = [];
+      currentProducts.forEach((product) => {
+        if (product.isMeasurable) {
+          isMeasurableProducts.push(product);
+        } else {
+          nonMeasurableProducts.push(product);
+        }
+      });
+      // console.log(isMeasurableProducts);
+      // console.log(nonMeasurableProducts);
+    }
+  }
   metatags.title = "Products";
 </script>
 
@@ -13,82 +51,51 @@
     <h2 class="text-base-content md:text-2xl text-xl font-bold text-opacity-80">
       Fixed
     </h2>
-
-    <div
-      class="grid grid-cols-1 lg:grid-cols-2 mt-4 gap-y-2 gap-x-0 lg:gap-x-2 lg:gap-y-2"
-    >
-      <ProductCard
-        productName="Sardine"
-        totalPrice="200"
-        amtInStock="5"
-        unitPrice="100"
-        grossPercentage="10"
-        unitName="spoons"
-      />
-      <ProductCard
-        productName="bread"
-        totalPrice="800"
-        unitPrice="100"
-        amtInStock="8"
-        grossPercentage="80"
-        unitName="pieces"
-      />
-      <ProductCard
-        productName="butter"
-        totalPrice="100"
-        unitPrice="100"
-        amtInStock="2"
-        grossPercentage="30"
-        unitName="spoons"
-      />
-      <ProductCard
-        productName="chocolate"
-        totalPrice="200"
-        amtInStock="8"
-        unitPrice="100"
-        grossPercentage="80"
-        unitName="spoons"
-      />
-    </div>
+    {#if isMeasurableProducts.length >= 1}
+      <div class="grid grid-cols-1 md:grid-cols-2 mt-4 ">
+        {#each isMeasurableProducts as product, key}
+          <ProductCard
+            productName={product.name}
+            amtInStock={product.amtLeftForSale}
+            unitPrice={product.unitPrice}
+            unitName={product.unitName}
+            isSoldOut={product.isSoldOut}
+            initialStock={product.initialStock}
+          />
+        {/each}
+      </div>
+    {:else}
+      <h1
+        class="text-primary text-opacity-20 font-extrabold text-3xl sm:text-4xl md:text-6xl"
+      >
+        No Products
+      </h1>
+    {/if}
   </div>
   <div>
     <h2 class="text-base-content md:text-2xl text-xl font-bold text-opacity-80">
       Measure-ables
     </h2>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 mt-4">
-      <ProductCard
-        productName="Sardine"
-        totalPrice="200"
-        amtInStock="5"
-        unitPrice="100"
-        grossPercentage="10"
-        unitName="spoons"
-      />
-      <ProductCard
-        productName="bread"
-        totalPrice="800"
-        unitPrice="100"
-        amtInStock="8"
-        grossPercentage="80"
-        unitName="pieces"
-      />
-      <ProductCard
-        productName="butter"
-        totalPrice="100"
-        unitPrice="100"
-        amtInStock="2"
-        grossPercentage="30"
-        unitName="spoons"
-      />
-      <ProductCard
-        productName="chocolate"
-        totalPrice="200"
-        amtInStock="8"
-        unitPrice="100"
-        grossPercentage="80"
-        unitName="spoons"
-      />
-    </div>
+    {#if nonMeasurableProducts.length > 0}
+      <div class="grid grid-cols-1 md:grid-cols-2 mt-4 ">
+        {#each nonMeasurableProducts as product, key}
+          <ProductCard
+            productName={product.name}
+            amtInStock={product.amtLeftForSale}
+            unitPrice={product.unitPrice}
+            unitName={product.unitName}
+            isSoldOut={product.isSoldOut}
+            initialStock={product.initialStock}
+          />
+        {/each}
+      </div>
+    {:else}
+      <h1
+        class="text-primary text-opacity-20 font-extrabold text-3xl sm:text-4xl md:text-6xl"
+      >
+        No Products
+      </h1>
+    {/if}
   </div>
 </div>

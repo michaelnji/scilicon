@@ -1,10 +1,22 @@
 <script>
+  import { fade } from "svelte/transition";
   import Icon from "./../../../../_components/icon.svelte";
-  export let productName, amtInStock, unitPrice, unitName;
+  export let productName, amtInStock, unitPrice, unitName, initialStock;
   let totalPrice = amtInStock * unitPrice;
+
+  console.log(amtInStock);
 </script>
 
-<div class="bg-base-100 rounded-box mx-2 my-2 shadow-lg px-3 py-4 pb-8">
+<div class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 relative py-8">
+  {#if amtInStock == 0}
+    <span
+      transition:fade
+      class="btn btn-primary text-primary bg-opacity-20 absolute -left-2 -top-2 btn-sm border-0"
+      ><Icon name="badge-check" />
+
+      <b class="capitalize ml-3">sold out!</b>
+    </span>
+  {/if}
   <div class="flex justify-between">
     <div>
       <span class="text-sm text-base-content capitalize text-opacity-80"
@@ -32,7 +44,7 @@
     </h2>
     <div class="flex justify-between mt-8">
       <h2 class="capitalize font-bold text-base flex text-success">
-        <span class="text-base-content mr-1"> total: </span>
+        <span class="text-base-content mr-1"> Amount Left(FCFA) : </span>
         {totalPrice}FCFA
       </h2>
 
