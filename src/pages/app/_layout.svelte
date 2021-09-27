@@ -4,7 +4,7 @@
   // import Navbar from "../../_components/navbar.svelte";
 </script>
 
-<div class="bg-base-200 text-base-content min-h-screen" data-theme="black">
+<div class="bg-base-200 text-base-content min-h-screen" data-theme="forest">
   <header>
     <TopNavbar />
   </header>

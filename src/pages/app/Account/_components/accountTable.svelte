@@ -1,56 +1,98 @@
 <script>
+  import { fade } from "svelte/transition";
+  import accounts from "./../../../../store/account.js";
+  import { onDestroy, onMount } from "svelte";
+  import _ from "underscore";
   import Icon from "./../../../../_components/icon.svelte";
+  import dbManager from "../../../../scripts/dbManager.js";
+  export let source;
+  let accountInfo, subscribe, accountTable, total;
+  total = 0;
+  onMount(() => {
+    subscribe = accounts.subscribe((value) => {
+      accountTable = value;
+    });
+    accountInfo = dbManager.getItemValue(source);
+    if (accountInfo.length > 0) {
+      total = _.reduce(
+        _.pluck(accountInfo, "amount"),
+        function (memo, num) {
+          return memo + num;
+        },
+        0
+      );
+    }
+  });
+  onDestroy(() => {
+    subscribe;
+  });
+  $: {
+    if (accountTable) {
+      accountInfo = dbManager.getItemValue(source);
+      if (accountInfo.length > 0) {
+        total = _.reduce(
+          _.pluck(accountInfo, "amount"),
+          function (memo, num) {
+            return memo + num;
+          },
+          0
+        );
+      }
+    }
+  }
+  function pay(id) {
+    dbManager.setItemValue(
+      source,
+      dbManager.getItemValue(source).filter((e) => e.id !== id)
+    );
+    accounts.update((value) => {
+      return [];
+    });
+  }
 </script>
 
-<div class=" max-w-full  overflow-x-auto ">
-  <table class="table w-full table-zebra">
-    <thead>
-      <tr>
-        <td class="text-primary font-bold">Item</td>
-        <td class="text-primary font-bold">Amt</td>
-        <td class="text-primary font-bold">Date</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class=" text-xs sm:text-base flex items-center"
-          >bread <button class="btn btn-ghost btn-sm ml-4"
-            ><Icon name="check" /></button
-          ></td
-        >
-        <td class="text-xs sm:text-base">300frs</td>
-        <td class="text-xs sm:text-base">09/10/21</td>
-      </tr>
-      <tr>
-        <td class=" text-xs sm:text-base">bread</td>
-        <td class="text-xs sm:text-base">300frs</td>
-        <td class="text-xs sm:text-base">09/10/21</td>
-      </tr>
-      <tr>
-        <td class=" text-xs sm:text-base">sachet Tomato</td>
-        <td class="text-xs sm:text-base">300frs</td>
-        <td class="text-xs sm:text-base">09/10/21</td>
-      </tr>
-      <tr>
-        <td class=" text-xs sm:text-base">Sardine</td>
-        <td class="text-xs sm:text-base">300frs</td>
-        <td class="text-xs sm:text-base">09/10/21</td>
-      </tr>
-      <tr>
-        <td class=" text-xs sm:text-base">Chocolate</td>
-        <td class="text-xs sm:text-base">300frs</td>
-        <td class="text-xs sm:text-base">09/10/21</td>
-      </tr>
-      <tr />
-    </tbody>
+{#if accountInfo && accountInfo.length > 0}
+  <div class=" max-w-full  overflow-x-auto " transition:fade>
+    <table class="table w-full table-zebra">
+      <thead>
+        <tr>
+          <td class="text-primary font-bold">Item</td>
+          <td class="text-primary font-bold">Amt</td>
+          <td class="text-primary font-bold">Date</td>
+        </tr>
+      </thead>
+      <tbody>
+        {#each accountInfo as info}
+          <tr>
+            <td class=" text-xs sm:text-base flex items-center"
+              >{info.name}
+              <button class="btn btn-ghost btn-sm ml-4" on:click={pay(info.id)}
+                ><Icon name="check" /></button
+              ></td
+            >
+            <td class="text-xs sm:text-base">{info.amount}</td>
+            <td class="text-xs sm:text-base">{info.date}</td>
+          </tr>
+        {/each}
 
-    <tr>
-      <td class=" text-xs sm:text-base font-extrabold">TOTAL</td>
-      <td class="text-xs sm:text-base" />
-      <td class="text-sm sm:text-xl text-primary font-extrabold">2.000fcfa</td>
-    </tr>
-  </table>
-</div>
+        <tr />
+      </tbody>
+
+      <tr>
+        <td class=" text-xs sm:text-base font-extrabold">TOTAL</td>
+        <td class="text-xs sm:text-base" />
+        <td class="text-sm sm:text-xl text-primary font-extrabold"
+          >{total}fcfa</td
+        >
+      </tr>
+    </table>
+  </div>
+{:else}
+  <h1
+    class="text-primary text-opacity-20 font-extrabold text-3xl sm:text-4xl md:text-6xl"
+  >
+    No expenses
+  </h1>{/if}
 
 <style>
 </style>

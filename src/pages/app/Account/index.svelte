@@ -17,11 +17,17 @@
 <h1 class="text-base-content md:text-4xl text-2xl font-bold mb-10">Accounts</h1>
 
 <div class="mb-16">
-  <h2
-    class="text-base-content md:text-2xl text-xl font-bold text-opacity-80 mb-4"
-  >
-    Current Account Details
-  </h2>
+  <div class="flex justify-between items-center mb-8">
+    <h2
+      class="text-base-content md:text-2xl text-xl font-bold text-opacity-80 "
+    >
+      Account Details
+    </h2>
+    <button class="btn btn-accent  capitalize rounded-box"
+      ><Icon name="database" />
+      <span class="ml-3 hidden md:inline">create Archive</span></button
+    >
+  </div>
   {#if accountInfo}
     <div
       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 md:gap-x-6  gap-y-4 gap-x-0"
@@ -91,24 +97,13 @@
   {/if}
 </div>
 
-<div
-  class="  grid grid-cols-1 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-0 gap-y-4 gap-x-0  mt-4"
->
+<div class="  grid grid-cols-1 mt-4 lg:w-10/12">
   <div>
     <h2
       class="text-base-content md:text-2xl text-xl font-bold text-opacity-80 mb-4"
     >
       Credit Account
     </h2>
-    <AccountTable />
-  </div>
-
-  <div>
-    <h2
-      class="text-base-content md:text-2xl text-xl font-bold text-opacity-80 mb-4"
-    >
-      Expense Account
-    </h2>
-    <AccountTable />
+    <AccountTable source={"SC_CREDIT_ACCOUNT"} />
   </div>
 </div>

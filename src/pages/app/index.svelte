@@ -8,7 +8,7 @@
   // initializing app variables in localStorage
   let varNames = ["SC_PRODUCTS", "SC_ACCOUNT_MONTHS", "SC_ACCOUNTS_WEEK"];
   onMount(() => {
-    let randTime = Math.ceil(Math.random() * 10000 + 1);
+    let randTime = Math.ceil(Math.random() * 13000 + 1);
     randTime = randTime > 3500 ? randTime : 5500;
     varNames.forEach((v) => {
       db.getOrSetItem(v, []);
@@ -29,6 +29,10 @@
     };
     db.getOrSetItem("SC_GENERAL_ACCOUNT", generalAccount);
     db.getOrSetItem("PI", 0);
+    db.getOrSetItem("SC_ACCOUNT_ARCHIVE_DAY", []);
+    db.getOrSetItem("SC_CREDIT_ACCOUNT", []);
+    db.getOrSetItem("SC_ACCOUNT_ARCHIVE_WEEK", []);
+    db.getOrSetItem("SC_ACCOUNT_ARCHIVE_MONTH", []);
     //  updating all stores
     products.update((value) => {
       return db.getItemValue("SC_PRODUCTS");
