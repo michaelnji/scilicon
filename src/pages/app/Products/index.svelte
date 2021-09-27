@@ -37,8 +37,7 @@
           nonMeasurableProducts.push(product);
         }
       });
-      // console.log(isMeasurableProducts);
-      // console.log(nonMeasurableProducts);
+     
     }
   }
   metatags.title = "Products";
@@ -49,18 +48,19 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 lg:gap-x-8 lg:gap-y-0">
   <div>
     <h2 class="text-base-content md:text-2xl text-xl font-bold text-opacity-80">
-      Fixed
+      Measurable
     </h2>
     {#if isMeasurableProducts.length >= 1}
-      <div class="grid grid-cols-1 md:grid-cols-2 mt-4 ">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 mt-4 overflow-x-hidden w-full"
+      >
         {#each isMeasurableProducts as product, key}
           <ProductCard
             productName={product.name}
             amtInStock={product.amtLeftForSale}
             unitPrice={product.unitPrice}
             unitName={product.unitName}
-            isSoldOut={product.isSoldOut}
-            initialStock={product.initialStock}
+            id={product.id}
           />
         {/each}
       </div>
@@ -74,19 +74,20 @@
   </div>
   <div>
     <h2 class="text-base-content md:text-2xl text-xl font-bold text-opacity-80">
-      Measure-ables
+      Fixed
     </h2>
 
     {#if nonMeasurableProducts.length > 0}
-      <div class="grid grid-cols-1 md:grid-cols-2 mt-4 ">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 mt-4 overflow-x-hidden w-full"
+      >
         {#each nonMeasurableProducts as product, key}
           <ProductCard
             productName={product.name}
             amtInStock={product.amtLeftForSale}
             unitPrice={product.unitPrice}
             unitName={product.unitName}
-            isSoldOut={product.isSoldOut}
-            initialStock={product.initialStock}
+            id={product.id}
           />
         {/each}
       </div>

@@ -1,9 +1,10 @@
 <script>
+  import products from "./../../../store/products.js";
   import { onMount } from "svelte";
 
   import { fade } from "svelte/transition";
   import db from "../../../scripts/dbManager";
-
+  import _ from "underscore";
   import Icon from "./../../../_components/icon.svelte";
   export let productName, unitName, unitPrice, amtInStock, id;
   let totalPrice = 0;
@@ -16,11 +17,9 @@
     currentProduct = db
       .getItemValue("SC_PRODUCTS")
       .filter((e) => e.id === id)[0];
-    console.log(currentProduct);
     totalPrice = currentProduct.totalSold;
     amtleft = currentProduct.amtLeftForSale;
     totalUnits = amtInStock - amtleft;
-    console.log(amtleft);
   });
   function updateSales() {
     if (totalPrice >= unitPrice * amtInStock) {
@@ -31,7 +30,27 @@
       amtleft = amtInStock - totalUnits;
       currentProduct.totalSold = totalPrice;
       currentProduct.amtLeftForSale = amtleft;
-      db.setItemValue("SC_PRODUCTS", [currentProduct, ...allProducts]);
+      currentProduct.totalUnitsSold = totalUnits;
+      // updating account details
+      let accountInfo = db.getItemValue("SC_GENERAL_ACCOUNT");
+      accountInfo.currentAccountBalance =
+        accountInfo.currentAccountBalance + unitPrice;
+
+      accountInfo.totalAmountFromSales =
+        accountInfo.totalAmountFromSales + unitPrice;
+      accountInfo.productsLeftInStock = accountInfo.productsLeftInStock - 1;
+      console.log(accountInfo.productsLeftInStock);
+      accountInfo.totalProductsSold = accountInfo.totalProductsSold + 1;
+      if (accountInfo.totalAmountFromSales >= accountInfo.capital) {
+        accountInfo.totalProfitMade =
+          accountInfo.totalAmountFromSales - accountInfo.capital;
+      }
+      db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+
+      console.log(allProducts.length);
+      products.update((value) => {
+        return db.setItemValue("SC_PRODUCTS", [...allProducts, currentProduct]);
+      });
     }
   }
 </script>

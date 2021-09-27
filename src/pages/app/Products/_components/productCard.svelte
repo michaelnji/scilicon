@@ -1,10 +1,18 @@
 <script>
   import { fade } from "svelte/transition";
+  import db from "../../../../scripts/dbManager";
+  import products from "../../../../store/products";
   import Icon from "./../../../../_components/icon.svelte";
-  export let productName, amtInStock, unitPrice, unitName, initialStock;
+  export let productName, amtInStock, unitPrice, unitName, id;
   let totalPrice = amtInStock * unitPrice;
-
-  console.log(amtInStock);
+  function deleteItem() {
+    products.update((value) => {
+      return db.setItemValue(
+        "SC_PRODUCTS",
+        db.getItemValue("SC_PRODUCTS").filter((e) => e.id !== id)
+      );
+    });
+  }
 </script>
 
 <div class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 relative py-8">
@@ -44,13 +52,25 @@
     </h2>
     <div class="flex justify-between mt-8">
       <h2 class="capitalize font-bold text-base flex text-success">
-        <span class="text-base-content mr-1"> Amount Left(FCFA) : </span>
+        <span class="text-base-content mr-1"> total(FCFA) :</span>
         {totalPrice}FCFA
       </h2>
 
-      <button class="btn btn-ghost btn-primary capitalize btn-sm ">
-        <Icon name="dots-horizontal" /></button
-      >
+      <div class="dropdown dropdown-top dropdown-left ">
+        <button class="btn btn-ghost btn-primary capitalize btn-sm ">
+          <Icon name="dots-horizontal" /></button
+        >
+        <ul class="menu dropdown-content bg-base-200 shadow-lg rounded-box p-3">
+          <li>
+            <a href={"/app/stat/product/" + id} class="btn btn-ghost capitalize"
+              >stats</a
+            >
+            <button class="btn btn-ghost capitalize" on:click={deleteItem}
+              >delete</button
+            >
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

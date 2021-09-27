@@ -9,11 +9,26 @@
   let varNames = ["SC_PRODUCTS", "SC_ACCOUNT_MONTHS", "SC_ACCOUNTS_WEEK"];
   onMount(() => {
     let randTime = Math.ceil(Math.random() * 10000 + 1);
-    randTime = randTime > 3500 ? randTime : 3500;
+    randTime = randTime > 3500 ? randTime : 5500;
     varNames.forEach((v) => {
       db.getOrSetItem(v, []);
     });
     db.getOrSetItem("SC_THEME", "light");
+    let generalAccount = {
+      capital: 50000,
+      currentAccountBalance: 0,
+      totalProductsStock: 0,
+      totalProductsSold: 0,
+      totalProfitMade: 0,
+      projectedProfit: 0,
+      projectedSales: 0,
+      productsLeftInStock: 0,
+      totalAmountFromSales: 0,
+      totalCredit: 0,
+      totalExpense: 0,
+    };
+    db.getOrSetItem("SC_GENERAL_ACCOUNT", generalAccount);
+    db.getOrSetItem("PI", 0);
     //  updating all stores
     products.update((value) => {
       return db.getItemValue("SC_PRODUCTS");

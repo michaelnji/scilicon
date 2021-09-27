@@ -5,7 +5,7 @@
   import { fade } from "svelte/transition";
   import { v4 as uuidv4 } from "uuid";
   import timeFunctions from "../../../scripts/timeFunctions";
-  import dbManager from "../../../scripts/dbManager";
+  import db from "../../../scripts/dbManager";
   let productName,
     productId,
     productAmt,
@@ -39,6 +39,7 @@
     productProjectedGain = productSP - productCP;
     let finalProduct = {
       name: productName,
+      index: db.getItemValue("PI"),
       costPrice: productCP,
       sellingPrice: productSP,
       grossGain: productProjectedGain,
@@ -47,14 +48,29 @@
       amount: productAmt,
       initialStock: productAmt,
       totalSold: 0,
+      totalUnitsSold: 0,
       amtLeftForSale: productAmt,
       unitName: productUnitName,
       unitPrice: productUnitPrice,
       isMeasurable: isProductMeasurable ? isProductMeasurable : false,
     };
     products.update((value) => {
-      return dbManager.setItemValue("SC_PRODUCTS", [finalProduct, ...Products]);
+      return db.setItemValue("SC_PRODUCTS", [finalProduct, ...Products]);
     });
+    // updating global account details
+    let accountInfo = db.getItemValue("SC_GENERAL_ACCOUNT");
+    accountInfo.totalProductsStock =
+      accountInfo.totalProductsStock + productAmt;
+    if (accountInfo.productsLeftInStock > 0) {
+      accountInfo.productsLeftInStock =
+        accountInfo.productsLeftInStock + productAmt;
+    } else {
+      accountInfo.productsLeftInStock = productAmt;
+    }
+    accountInfo.projectedSales = productAmt * productUnitPrice;
+    accountInfo.projectedProfit =
+      accountInfo.projectedProfit + (productSP - productCP);
+    db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
     //  resetting data
     productName = "";
     productAmt = "";
@@ -62,6 +78,7 @@
     productUnitPrice = "";
     isProductMeasurable = false;
     productCP = "";
+    db.setItemValue("PI", db.getItemValue("PI") + 1);
     closeModal();
   }
   function triggerCancelEvent() {

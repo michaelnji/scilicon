@@ -18,7 +18,7 @@
       </div>
       <ul
         tabindex="0"
-        class="p-2 shadow menu dropdown-content bg-base-200 rounded-box w-52 min-w-max"
+        class="p-2 shadow-lg menu dropdown-content bg-base-100 rounded-box w-52 min-w-max"
       >
         <li>
           <a>Item 1</a>

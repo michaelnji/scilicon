@@ -3,10 +3,11 @@
   import products from "./../../../../store/products.js";
   import db from "../../../../../../avecas/src/scripts/dbManager";
   import { onDestroy, onMount } from "svelte";
+  import _ from "underscore";
   let currentProducts, totalProducts, grossGain, totalSales, subscribe;
   currentProducts = [];
   onMount(() => {
-    currentProducts = db.getItemValue("SC_PRODUCTS");
+    currentProducts = _.sortBy(db.getItemValue("SC_PRODUCTS"), "index");
   });
   onDestroy(() => {
     subscribe;
