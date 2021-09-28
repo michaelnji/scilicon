@@ -88,10 +88,10 @@
 </script>
 
 <button
-  class="capitalize btn btn-primary fixed bottom-4 right-4  shadow-xl  btn-md z-20  flex item-center  rounded-box "
+  class="capitalize btn btn-primary fixed bottom-4 right-4  shadow-xl  btn-md z-20  flex item-center  rounded-box"
   on:click={closeModal}
   ><Icon name="plus" />
-  <span class="hidden ml-3 lg:inline">Add product</span></button
+  <span class="hidden ml-3 md:inline">Add product</span></button
 >
 {#if isOpen}
   <div
@@ -99,7 +99,7 @@
     transition:fade={{ duration: 300 }}
   >
     <div
-      class="p-4 md:px-6 bg-base-100 w-full md:max-w-sm lg:max-w-md shadow-2xl z-50 rounded-t-box md:rounded-box "
+      class="p-4 md:px-6 bg-base-100 w-full md:max-w-md shadow-2xl z-50 rounded-t-box md:rounded-box "
     >
       <div class="flex items-center justify-between mb-2">
         <h3 class="text-xl md:text-2xl font-bold text-primary capitalize">

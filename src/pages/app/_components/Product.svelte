@@ -1,4 +1,5 @@
 <script>
+  import Toast from "./../../../_components/toast.svelte";
   import products from "./../../../store/products.js";
   import { onMount } from "svelte";
 
@@ -59,6 +60,12 @@
   class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 pt-8 py-4 relative"
 >
   {#if totalPrice >= unitPrice * amtInStock}
+    <Toast
+      content={productName + " sold out"}
+      type="info"
+      duration="3"
+      isOpen
+    />
     <span
       transition:fade
       class="btn btn-primary text-primary bg-opacity-20 absolute -left-2 -top-2 btn-sm border-0"
