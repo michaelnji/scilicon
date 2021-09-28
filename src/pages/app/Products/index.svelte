@@ -1,13 +1,12 @@
 <script>
   import { fade, scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import Toast from "./../../../_components/toast.svelte";
   import AddProduct from "./../_components/addProduct.svelte";
   import ProductCard from "./_components/productCard.svelte";
   import { metatags } from "@roxi/routify";
   import { onDestroy, onMount } from "svelte";
   import products from "./../../../store/products.js";
-  import db from "./../../../../scripts/dbManager";
+  import db from "./../../../scripts/dbManager";
   let currentProducts,
     totalProducts,
     grossGain,
