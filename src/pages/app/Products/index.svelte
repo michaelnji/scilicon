@@ -7,7 +7,7 @@
   import { metatags } from "@roxi/routify";
   import { onDestroy, onMount } from "svelte";
   import products from "./../../../store/products.js";
-  import db from "../../../../../avecas/src/scripts/dbManager";
+  import db from "./../../../../scripts/dbManager";
   let currentProducts,
     totalProducts,
     grossGain,

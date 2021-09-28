@@ -1,7 +1,7 @@
 <script>
   import Product from "./../../_components/Product.svelte";
   import products from "./../../../../store/products.js";
-  import db from "../../../../../../avecas/src/scripts/dbManager";
+  import db from "./../../../../scripts/dbManager";
   import { onDestroy, onMount } from "svelte";
   import _ from "underscore";
   let currentProducts, totalProducts, grossGain, totalSales, subscribe;
