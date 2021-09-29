@@ -1,8 +1,8 @@
 <script>
-  import Toast from "./../../../_components/toast.svelte";
   import products from "./../../../store/products.js";
   import { onMount } from "svelte";
 
+  import { addToast } from "./../../../store/toast";
   import { fade } from "svelte/transition";
   import db from "../../../scripts/dbManager";
   import _ from "underscore";
@@ -24,6 +24,11 @@
   });
   function updateSales() {
     if (totalPrice >= unitPrice * amtInStock) {
+      let message = ` ${productName}  sold out!!`;
+      let timeout = 3000;
+      let type = "warning";
+      let dismissable = true;
+      addToast({ message, type, dismissable, timeout });
       return;
     } else {
       totalPrice = totalPrice + unitPrice;
@@ -40,7 +45,6 @@
       accountInfo.totalAmountFromSales =
         accountInfo.totalAmountFromSales + unitPrice;
       accountInfo.productsLeftInStock = accountInfo.productsLeftInStock - 1;
-      console.log(accountInfo.productsLeftInStock);
       accountInfo.totalProductsSold = accountInfo.totalProductsSold + 1;
       if (accountInfo.totalAmountFromSales >= accountInfo.capital) {
         accountInfo.totalProfitMade =
@@ -48,7 +52,6 @@
       }
       db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
 
-      console.log(allProducts.length);
       products.update((value) => {
         return db.setItemValue("SC_PRODUCTS", [...allProducts, currentProduct]);
       });
@@ -60,12 +63,6 @@
   class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 pt-8 py-4 relative"
 >
   {#if totalPrice >= unitPrice * amtInStock}
-    <Toast
-      content={productName + " sold out"}
-      type="info"
-      duration="3"
-      isOpen
-    />
     <span
       transition:fade
       class="btn btn-primary text-primary bg-opacity-20 absolute -left-2 -top-2 btn-sm border-0"

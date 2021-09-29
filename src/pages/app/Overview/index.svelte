@@ -2,7 +2,6 @@
   import ProductList from "./_components/productList.svelte";
   import TodayStats from "./../_components/todayStats.svelte";
   import { metatags } from "@roxi/routify";
-
   metatags.title = "Overview";
 </script>
 

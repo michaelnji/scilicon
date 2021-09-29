@@ -2,6 +2,7 @@
   import { fade } from "svelte/transition";
   import db from "../../../../scripts/dbManager";
   import products from "../../../../store/products";
+  import { addToast } from "../../../../store/toast";
   import Icon from "./../../../../_components/icon.svelte";
   export let productName, amtInStock, unitPrice, unitName, id;
   let totalPrice = amtInStock * unitPrice;
@@ -12,6 +13,11 @@
         db.getItemValue("SC_PRODUCTS").filter((e) => e.id !== id)
       );
     });
+    let message = ` ${productName}  deleted`;
+    let timeout = 2000;
+    let type = "error";
+    let dismissable = false;
+    addToast({ message, type, dismissable, timeout });
   }
 </script>
 

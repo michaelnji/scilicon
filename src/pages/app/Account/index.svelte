@@ -23,7 +23,7 @@
     >
       Account Details
     </h2>
-    <button class="btn btn-accent  capitalize rounded-box"
+    <button class="btn btn-accent  capitalize rounded-box z-20"
       ><Icon name="database" />
       <span class="ml-3 hidden md:inline">create Archive</span></button
     >

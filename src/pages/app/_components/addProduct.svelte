@@ -1,4 +1,5 @@
 <script>
+  import { addToast } from "./../../../store/toast.js";
   import products from "./../../../store/products.js";
   import Icon from "./../../../_components/icon.svelte";
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
@@ -71,6 +72,11 @@
     accountInfo.projectedProfit =
       accountInfo.projectedProfit + (productSP - productCP);
     db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+    let message = ` ${productName}  created`;
+    let timeout = 2000;
+    let type = "success";
+    let dismissable = false;
+    addToast({ message, type, dismissable, timeout });
     //  resetting data
     productName = "";
     productAmt = "";
@@ -79,6 +85,7 @@
     isProductMeasurable = false;
     productCP = "";
     db.setItemValue("PI", db.getItemValue("PI") + 1);
+    // showing alert for success
     closeModal();
   }
   function triggerCancelEvent() {
@@ -95,11 +102,11 @@
 >
 {#if isOpen}
   <div
-    class="w-screen px-2 pt-3 h-screen hero-overlay left-0 fixed top-0 overflow-scroll grid md:place-items-center cursor-d   place-items-end z-50 "
+    class="w-screen h-screen hero-overlay left-0 fixed top-0 overflow-scroll grid place-items-center z-50 "
     transition:fade={{ duration: 300 }}
   >
     <div
-      class="p-4 md:px-6 bg-base-100 w-full md:max-w-md shadow-2xl z-50 rounded-t-box md:rounded-box "
+      class="p-4 md:px-6 bg-base-100 w-11/12 md:max-w-md shadow-2xl z-50 rounded-t-box md:rounded-box mx-auto  my-auto overflow-visible px-3"
     >
       <div class="flex items-center justify-between mb-2">
         <h3 class="text-xl md:text-2xl font-bold text-primary capitalize">

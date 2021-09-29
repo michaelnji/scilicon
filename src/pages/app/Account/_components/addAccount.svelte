@@ -6,6 +6,7 @@
   import timeFunctions from "../../../../scripts/timeFunctions";
   import accounts from "../../../../store/account";
   import dbManager from "../../../../scripts/dbManager";
+import { addToast } from "../../../../store/toast";
   let creditName, creditAmt;
   const id = "addproduct";
   let isOpen = false;
@@ -28,7 +29,12 @@
     dbManager.setItemValue("SC_CREDIT_ACCOUNT", [...creditAccount, item]);
     accounts.update((value) => {
       return [];
-    });
+    }); 
+      let message = ` success`;
+    let timeout = 2000;
+    let type = "success";
+    let dismissable = false;
+    addToast({ message, type, dismissable, timeout });
     creditName = "";
     creditAmt = 0;
     closeModal();

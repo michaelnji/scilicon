@@ -5,6 +5,8 @@
   import _ from "underscore";
   import Icon from "./../../../../_components/icon.svelte";
   import dbManager from "../../../../scripts/dbManager.js";
+  import { addToast } from "../../../../store/toast.js";
+  import { flip } from "svelte/animate";
   export let source;
   let accountInfo, subscribe, accountTable, total;
   total = 0;
@@ -45,6 +47,11 @@
       source,
       dbManager.getItemValue(source).filter((e) => e.id !== id)
     );
+    let message = ` paid successfully`;
+    let timeout = 2000;
+    let type = "success";
+    let dismissable = false;
+    addToast({ message, type, dismissable, timeout });
     accounts.update((value) => {
       return [];
     });
@@ -62,8 +69,8 @@
         </tr>
       </thead>
       <tbody>
-        {#each accountInfo as info}
-          <tr>
+        {#each accountInfo as info (info.id)}
+          <tr animate:flip={{ duration: 500 }}>
             <td class=" text-xs sm:text-base flex items-center"
               >{info.name}
               <button class="btn btn-ghost btn-sm ml-4" on:click={pay(info.id)}
