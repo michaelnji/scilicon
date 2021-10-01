@@ -1,6 +1,8 @@
 <script>
+  import accounts from "./../../../store/account.js";
+  import ChangeCapital from "./_components/changeCapital.svelte";
   import { fade } from "svelte/transition";
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import AddAccount from "./_components/addAccount.svelte";
   import Icon from "./../../../_components/icon.svelte";
   import AccountTable from "./_components/accountTable.svelte";
@@ -8,10 +10,22 @@
   import dbManager from "../../../scripts/dbManager";
 
   metatags.title = "Accounts";
-  let accountInfo;
+  let accountInfo, subscribe, a;
   onMount(() => {
     accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+    subscribe = accounts.subscribe((value) => {
+      a = value;
+    });
   });
+  onDestroy(() => {
+    subscribe;
+  });
+
+  $: {
+    if (a) {
+      accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+    }
+  }
 </script>
 
 <div in:fade={{ delay: 300 }}>
@@ -27,7 +41,7 @@
       >
         Account Details
       </h2>
-      <button class="btn btn-accent  capitalize rounded-box z-20"
+      <button class="btn btn-accent  capitalize rounded-box"
         ><Icon name="database" />
         <span class="ml-3 hidden md:inline">create Archive</span></button
       >
@@ -43,7 +57,7 @@
               {accountInfo.capital} <small>FCFA</small>
             </div>
             <div class="stat-actions">
-              <button class="btn btn-accent btn-sm capitalize">change</button>
+              <ChangeCapital />
             </div>
           </div>
         </div>

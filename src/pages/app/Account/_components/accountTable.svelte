@@ -47,6 +47,11 @@
       source,
       dbManager.getItemValue(source).filter((e) => e.id !== id)
     );
+    let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+    accountInfo.currentAccountBalance =
+      accountInfo.currentAccountBalance -
+      dbManager.getItemValue(source).filter((e) => e.id === id)[0].amount;
+    dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
     let message = ` paid successfully`;
     let timeout = 2000;
     let type = "success";

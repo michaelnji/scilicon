@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
 
   import { addToast } from "./../../../store/toast";
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import db from "../../../scripts/dbManager";
   import _ from "underscore";
   import Icon from "./../../../_components/icon.svelte";
@@ -82,7 +82,10 @@
       <span class="text-xs text-base-content capitalize text-opacity-50"
         >units sold</span
       >
-      <h2 class="capitalize text-info font-bold text-md">
+      <h2
+        class="capitalize text-info font-bold text-md"
+        in:fly={{ duration: 400, y: -100, delay: 600 }}
+      >
         +{totalUnits}
         {unitName}
       </h2>

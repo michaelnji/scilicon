@@ -1,24 +1,18 @@
 <script>
-  import { addToast } from "./../../../store/toast.js";
   import products from "./../../../store/products.js";
   import Icon from "./../../../_components/icon.svelte";
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
-  import { fade } from "svelte/transition";
-  import { v4 as uuidv4 } from "uuid";
-  import timeFunctions from "../../../scripts/timeFunctions";
-  import db from "../../../scripts/dbManager";
+  import pm from "../../../scripts/productsManager";
+  import { fade, scale } from "svelte/transition";
   let productName,
-    productId,
     productAmt,
     productUnitPrice,
     productUnitName,
     isProductMeasurable,
-    productCreationDate,
     productCP,
-    productSP,
-    productProjectedGain,
     Products,
     subscribe;
+  let isOpen = false;
   onMount(() => {
     subscribe = products.subscribe((value) => {
       Products = value;
@@ -27,56 +21,19 @@
   onDestroy(() => {
     subscribe;
   });
-  let isOpen = false;
-  const dispatch = createEventDispatcher();
   function closeModal() {
     isOpen = !isOpen;
   }
   function triggerSuccessEvent() {
-    productId = uuidv4();
-    // FIXME : change format of date to : dd/mm/yyyy
-    productCreationDate = timeFunctions.today();
-    productSP = productAmt * productUnitPrice;
-    productProjectedGain = productSP - productCP;
-    let finalProduct = {
-      name: productName,
-      index: db.getItemValue("PI"),
-      costPrice: productCP,
-      sellingPrice: productSP,
-      grossGain: productProjectedGain,
-      creationDate: productCreationDate,
-      id: productId,
-      amount: productAmt,
-      initialStock: productAmt,
-      totalSold: 0,
-      totalUnitsSold: 0,
-      amtLeftForSale: productAmt,
-      unitName: productUnitName,
-      unitPrice: productUnitPrice,
-      isMeasurable: isProductMeasurable ? isProductMeasurable : false,
-    };
-    products.update((value) => {
-      return db.setItemValue("SC_PRODUCTS", [finalProduct, ...Products]);
-    });
-    // updating global account details
-    let accountInfo = db.getItemValue("SC_GENERAL_ACCOUNT");
-    accountInfo.totalProductsStock =
-      accountInfo.totalProductsStock + productAmt;
-    if (accountInfo.productsLeftInStock > 0) {
-      accountInfo.productsLeftInStock =
-        accountInfo.productsLeftInStock + productAmt;
-    } else {
-      accountInfo.productsLeftInStock = productAmt;
-    }
-    accountInfo.projectedSales = productAmt * productUnitPrice;
-    accountInfo.projectedProfit =
-      accountInfo.projectedProfit + (productSP - productCP);
-    db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
-    let message = ` ${productName}  created`;
-    let timeout = 2000;
-    let type = "success";
-    let dismissable = false;
-    addToast({ message, type, dismissable, timeout });
+    pm.addProduct(
+      productName,
+      productAmt,
+      productUnitName,
+      productUnitPrice,
+      isProductMeasurable,
+      productCP,
+      Products
+    );
     //  resetting data
     productName = "";
     productAmt = "";
@@ -84,8 +41,6 @@
     productUnitPrice = "";
     isProductMeasurable = false;
     productCP = "";
-    db.setItemValue("PI", db.getItemValue("PI") + 1);
-    // showing alert for success
     closeModal();
   }
   function triggerCancelEvent() {
@@ -106,6 +61,7 @@
     transition:fade={{ duration: 300 }}
   >
     <div
+      out:scale={{ duration: 300 }}
       class="p-4 md:px-6 bg-base-100 w-11/12 md:max-w-md shadow-2xl z-50 rounded-t-box md:rounded-box mx-auto  my-auto overflow-visible px-3"
     >
       <div class="flex items-center justify-between mb-2">

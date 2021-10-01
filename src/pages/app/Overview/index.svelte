@@ -6,7 +6,7 @@
   metatags.title = "Overview";
 </script>
 
-<div in:fly={{ duration: 1400, y: -100 }}>
+<div in:fly={{ duration: 400, y: -100, delay: 300 }}>
   <h1 class="text-base-content md:text-4xl text-2xl font-bold mb-10">
     Overview
   </h1>

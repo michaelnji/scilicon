@@ -7,10 +7,8 @@
   import accounts from "../../../../store/account";
   import dbManager from "../../../../scripts/dbManager";
   import { addToast } from "../../../../store/toast";
-  let creditName, creditAmt;
-  const id = "addproduct";
+  let capitalAmt;
   let isOpen = false;
-  let isTabActive = true;
   const dispatch = createEventDispatcher();
 
   // closes modal
@@ -18,29 +16,19 @@
     isOpen = !isOpen;
   }
 
-  function addCreditItem() {
-    // on add credit
-    let creditAccount = dbManager.getItemValue("SC_CREDIT_ACCOUNT");
+  function changeValue() {
     let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
-    let item = {};
-    item.name = creditName;
-    item.date = timeFunctions.today();
-    item.id = uuidv4();
-    item.amount = creditAmt;
-    accountInfo.currentAccountBalance =
-      accountInfo.currentAccountBalance - creditAmt;
-    dbManager.setItemValue("SC_CREDIT_ACCOUNT", [...creditAccount, item]);
+    accountInfo.capital = capitalAmt;
     dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
     accounts.update((value) => {
       return [];
     });
-    let message = ` success`;
+    let message = `changed`;
     let timeout = 2000;
     let type = "success";
     let dismissable = false;
     addToast({ message, type, dismissable, timeout });
-    creditName = "";
-    creditAmt = "";
+    capitalAmt = "";
     closeModal();
   }
 
@@ -50,11 +38,8 @@
   }
 </script>
 
-<button
-  class="capitalize btn btn-primary fixed bottom-4 right-4  shadow-xl  btn-md z-20  flex item-center  rounded-box "
-  on:click={closeModal}
-  ><Icon name="plus" />
-  <span class="hidden ml-3 lg:inline">Add item</span></button
+<button class="btn btn-accent btn-sm capitalize " on:click={closeModal}>
+  change</button
 >
 {#if isOpen}
   <div
@@ -68,7 +53,7 @@
 
       <div class="flex items-center justify-between">
         <h3 class="text-xl md:text-2xl font-bold text-primary capitalize my-4">
-          new credit
+          new capital value
         </h3>
         <button class="btn btn-ghost btn-sm" on:click={closeModal}
           ><Icon name="x" /></button
@@ -76,19 +61,6 @@
       </div>
       <div>
         <form class="mb-8   grid grid-cols-1 gap-y-3  ">
-          <div class="form-control">
-            <label class="label" for="product name">
-              <span class="label-text">Product Name</span>
-            </label>
-            <input
-              placeholder="fish"
-              name="product name"
-              class="input input-bordered"
-              type="text"
-              bind:value={creditName}
-            />
-          </div>
-
           <div class="form-control">
             <label class="label" for="Amount">
               <span class="label-text">Amount</span>
@@ -98,7 +70,7 @@
               name="Amount"
               class="input input-bordered"
               type="number"
-              bind:value={creditAmt}
+              bind:value={capitalAmt}
             />
           </div>
         </form>
@@ -107,9 +79,9 @@
       <div>
         <button
           class="btn btn-primary capitalize btn-sm mr-3 sm:btn-md"
-          on:click|preventDefault={addCreditItem}
+          on:click|preventDefault={changeValue}
         >
-          add Credit
+          change
         </button>
 
         <button
@@ -121,4 +93,5 @@
   </div>
 {/if}
 
-<style></style>
+<style>
+</style>
