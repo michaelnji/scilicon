@@ -1,5 +1,5 @@
 <script>
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import accounts from "./../../../../store/account.js";
   import { onDestroy, onMount } from "svelte";
   import _ from "underscore";
@@ -59,7 +59,7 @@
 </script>
 
 {#if accountInfo && accountInfo.length > 0}
-  <div class=" max-w-full  overflow-x-auto " transition:fade>
+  <div class=" max-w-full  overflow-x-auto " in:fade>
     <table class="table w-full table-zebra">
       <thead>
         <tr>
@@ -97,6 +97,7 @@
 {:else}
   <h1
     class="text-primary text-opacity-20 font-extrabold text-3xl sm:text-4xl md:text-6xl"
+    in:fly={{ y: 500 }}
   >
     No expenses
   </h1>{/if}

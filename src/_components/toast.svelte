@@ -11,7 +11,7 @@
 <article
   role="alert"
   in:fly={{ y: 500 }}
-  out:fade
+  out:fade={{duration: 1000}}
   class={"p-4 rounded-box bg-opacity-20 shadow-lg min-w-max md:max-w-max flex items-center justify-between fixed left-1/2 bottom-8 transform -translate-x-1/2 capitalize text-xs z-50 font-bold sm:text-sm text-" +
     type +
     " bg-" +

@@ -64,7 +64,7 @@
 >
   {#if totalPrice >= unitPrice * amtInStock}
     <span
-      transition:fade
+      in:fade
       class="btn btn-primary text-primary bg-opacity-20 absolute -left-2 -top-2 btn-sm border-0"
       ><Icon name="badge-check" />
 

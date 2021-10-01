@@ -24,7 +24,7 @@
 <div class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 relative py-8">
   {#if amtInStock == 0}
     <span
-      transition:fade
+      in:fade
       class="btn btn-primary text-primary bg-opacity-20 absolute -left-2 -top-2 btn-sm border-0"
       ><Icon name="badge-check" />
 
