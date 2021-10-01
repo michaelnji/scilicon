@@ -1,12 +1,14 @@
 <!-- routify:options preload="proximity" -->
 <script>
+  import Notifications from "./../../_components/notifications.svelte";
   import Toasts from "./../../_components/Toasts.svelte";
   import TopNavbar from "../../_components/topNavbar.svelte";
   // import Navbar from "../../_components/navbar.svelte";
 </script>
 
-<div class="bg-base-200 text-base-content min-h-screen" data-theme="forest">
+<div class="bg-base-200 text-base-content min-h-screen" data-theme="black">
   <Toasts />
+  <Notifications />
   <header>
     <TopNavbar />
   </header>

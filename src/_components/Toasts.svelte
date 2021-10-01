@@ -8,7 +8,7 @@
 {#if $toasts}
   <section>
     {#each $toasts as toast (toast.id)}
-      <div class="m-3" animate:flip={{ duration: 500 }} data-theme="forest">
+      <div class="m-3" animate:flip={{ duration: 500 }}>
         <Toast
           type={toast.type}
           dismissible={toast.dismissible}

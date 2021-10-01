@@ -65,7 +65,7 @@
       class="p-4 md:px-6 bg-base-100 w-11/12 md:max-w-md shadow-2xl z-50 rounded-t-box md:rounded-box mx-auto  my-auto overflow-visible px-3"
     >
       <div class="flex items-center justify-between mb-2">
-        <h3 class="text-xl md:text-2xl font-bold text-primary capitalize">
+        <h3 class="text-xl md:text-2xl font-bold text-primary  capitalize">
           Add Product
         </h3>
 

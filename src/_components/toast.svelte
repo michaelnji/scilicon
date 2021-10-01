@@ -8,7 +8,7 @@
   export let dismissible = true;
 </script>
 
-<div class="bg-base-100" data-theme="forest">
+<div class="bg-base-100">
   <article
     role="alert"
     in:fly={{ y: 500 }}

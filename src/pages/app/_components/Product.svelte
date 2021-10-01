@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
 
   import { addToast } from "./../../../store/toast";
+  import { addNotification } from "./../../../store/notifications";
   import { fade, fly } from "svelte/transition";
   import db from "../../../scripts/dbManager";
   import _ from "underscore";
@@ -23,7 +24,7 @@
     totalUnits = amtInStock - amtleft;
   });
   function updateSales() {
-    if (totalPrice >= unitPrice * amtInStock) {
+      if (totalPrice >= unitPrice * amtInStock) {
       let message = ` ${productName}  sold out!!`;
       let timeout = 3000;
       let type = "warning";
@@ -57,6 +58,7 @@
       });
     }
   }
+
 </script>
 
 <div
