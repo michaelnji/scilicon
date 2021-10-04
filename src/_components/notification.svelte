@@ -10,11 +10,11 @@
 </script>
 
 <div
-  class=" notification p-4 md:px-6 bg-base-100 min-w-11/12  md:min-w-md shadow-2xl z-50  rounded-box mx-auto  my-auto overflow-visible px-3"
+  class=" p-4 md:px-6 bg-base-100 min-w-11/12  md:min-w-md shadow-2xl z-50  rounded-box mx-auto  my-auto overflow-visible px-3"
   in:fly={{ y: -500 }}
   out:fade
 >
-  <div class=" mb-4">
+  <div class=" mb-2">
     {#if dismissible}
       <span class="mr-auto" />
       <button
@@ -25,18 +25,15 @@
       </button>
     {/if}
   </div>
-  <h3 class={"font-bold mr-4 text-xl lg:text-2xl capitalize text-" + type}>
+  <h3 class={"font-extrabold mr-4 text-lg lg:text-xl capitalize text-" + type}>
     {title}
   </h3>
   <div class="my-3">
-    <p class="prose text-opacity-75">
+    <p class=" leading-relaxed text-base-content text-opacity-75">
       <slot />
     </p>
   </div>
 </div>
 
 <style>
-  .notification {
-    z-index: 1000 !important;
-  }
 </style>

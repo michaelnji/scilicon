@@ -1,18 +1,26 @@
 <script>
   import Icon from "./../../../../_components/icon.svelte";
-  import { createEventDispatcher, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { v4 as uuidv4 } from "uuid";
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import timeFunctions from "../../../../scripts/timeFunctions";
   import accounts from "../../../../store/account";
   import dbManager from "../../../../scripts/dbManager";
   import { addToast } from "../../../../store/toast";
-  let creditName, creditAmt;
-  const id = "addproduct";
+  let active, creditPrice, creditAmt, allProducts, creditName;
+  creditPrice = 0;
   let isOpen = false;
-  let isTabActive = true;
-  const dispatch = createEventDispatcher();
+  let errorOccurred = false;
 
+  onMount(() => {
+    allProducts = dbManager.getItemValue("SC_PRODUCTS");
+  });
+  // selects a product and sets its id, name and price to a variable to be used in the addCredit function
+  function activate(id1, name, price) {
+    active = id1;
+    creditName = name;
+    creditPrice = price;
+  }
   // closes modal
   function closeModal() {
     isOpen = !isOpen;
@@ -20,30 +28,68 @@
 
   function addCreditItem() {
     // on add credit
-    let creditAccount = dbManager.getItemValue("SC_CREDIT_ACCOUNT");
-    let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
-    let item = {};
-    item.name = creditName;
-    item.date = timeFunctions.today();
-    item.id = uuidv4();
-    item.amount = creditAmt;
-    accountInfo.currentAccountBalance =
-      accountInfo.currentAccountBalance - creditAmt;
-    dbManager.setItemValue("SC_CREDIT_ACCOUNT", [...creditAccount, item]);
-    dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
-    accounts.update((value) => {
-      return [];
-    });
-    let message = ` success`;
-    let timeout = 2000;
-    let type = "success";
-    let dismissable = false;
-    addToast({ message, type, dismissable, timeout });
-    creditName = "";
-    creditAmt = "";
-    closeModal();
+    // simple form validation
+    if (creditName == undefined || creditAmt == undefined) {
+      errorOccurred = true;
+      setTimeout(() => {
+        errorOccurred = false;
+      }, 3500);
+    } else {
+      // localStorage values which need to be updated
+      let creditAccount = dbManager.getItemValue("SC_CREDIT_ACCOUNT");
+      let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+      // new credit item
+      let item = {};
+      // only allow to borrow an amount which is <= amount which has already being sold
+      if (accountInfo.currentAccountBalance < creditAmt * creditPrice) {
+        let message = ` cannot borrow`;
+        let timeout = 4000;
+        let type = "error";
+        let dismissible = false;
+        addToast({ message, type, dismissible, timeout });
+      } else {
+        // info for new credit item
+        item.name = creditName ? creditName : "product";
+        item.date = timeFunctions.today();
+        item.id = uuidv4();
+        item.amount = creditAmt * creditPrice;
+        let products, product;
+        // all products
+        products = dbManager.getItemValue("SC_PRODUCTS");
+        // current product
+        product = products.filter((e) => e.id === active)[0];
+        // amount of borrowed products is deducted from amount of products left in that individual products account
+        product.amtLeftForSale = product.amtLeftForSale - creditAmt;
+        dbManager.setItemValue("SC_CREDIT_ACCOUNT", [...creditAccount, item]);
+        // removing products borrowed from total product stock left for sale
+        accountInfo.productsLeftInStock =
+          accountInfo.productsLeftInStock - creditAmt;
+        // updating all localStorage values
+        products = products.filter((e) => e.id !== active);
+        dbManager.setItemValue("SC_PRODUCTS", [...products, product]);
+        dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+        accounts.update((value) => {
+          return [];
+        });
+        let message = ` success`;
+        let timeout = 2000;
+        let type = "success";
+        let dismissible = false;
+        addToast({ message, type, dismissible, timeout });
+        creditName = undefined;
+        creditAmt = undefined;
+        closeModal();
+      }
+    }
   }
-
+  // clear all input values on close
+  $: {
+    if (isOpen == false) {
+      creditName = undefined;
+      creditAmt = undefined;
+      active = null;
+    }
+  }
   function triggerCancelEvent() {
     //    oN Cancel
     closeModal();
@@ -76,30 +122,69 @@
       </div>
       <div>
         <form class="mb-8   grid grid-cols-1 gap-y-3  ">
-          <div class="form-control">
-            <label class="label" for="product name">
-              <span class="label-text">Product Name</span>
-            </label>
-            <input
-              placeholder="fish"
-              name="product name"
-              class="input input-bordered"
-              type="text"
-              bind:value={creditName}
-            />
+          <div>
+            {#if errorOccurred && creditName == undefined}
+              <span
+                class="label-text text-error text-opacity-80"
+                in:fly={{ y: 100 }}>please choose a product</span
+              >
+            {:else}
+              <span class="label-text text-opacity-80 capitalize"
+                >choose a product</span
+              >
+            {/if}
+            <div
+              class="grid md:grid-cols-3 sm:grid-cols-2  mt-2 grid-cols-1 gap-2"
+            >
+              {#each allProducts as product}
+                <span
+                  class="text-primary bg-primary bg-opacity-20 capitalize  p-2  flex justify-between items-center rounded-full  cursor-pointer transition duration-500 ring ring-transparent backdrop-blur-sm"
+                  class:ring-error={errorOccurred && creditName == undefined}
+                  class:bg-opacity-100={active == product.id}
+                  class:font-bold={active == product.id}
+                  class:text-primary-content={active == product.id}
+                  class:shadow-xl={active == product.id}
+                  on:click={activate(
+                    product.id,
+                    product.name,
+                    product.unitPrice
+                  )}
+                  >{product.name}
+                  <span
+                    class="badge badge-primary badge-sm transition duration-300 md:"
+                    class:bg-neutral={active == product.id}
+                    class:text-neutral-content={active == product.id}
+                    >{product.amtLeftForSale}</span
+                  ></span
+                >
+              {/each}
+            </div>
           </div>
 
-          <div class="form-control">
-            <label class="label" for="Amount">
-              <span class="label-text">Amount</span>
-            </label>
-            <input
-              placeholder="00"
-              name="Amount"
-              class="input input-bordered"
-              type="number"
-              bind:value={creditAmt}
-            />
+          <div class="grid grid-cols-2">
+            <div class="form-control">
+              <label class="label" for="Amount">
+                {#if errorOccurred && creditAmt == undefined}
+                  <span
+                    class="label-text text-error text-opacity-80"
+                    in:fly={{ y: 100 }}>please fill this field</span
+                  >
+                {:else}
+                  <span class="label-text text-opacity-80">Amount</span>
+                {/if}
+              </label>
+              <input
+                placeholder="00"
+                name="Amount"
+                class="input input-bordered"
+                type="number"
+                class:input-error={errorOccurred && creditAmt == undefined}
+                bind:value={creditAmt}
+              />
+            </div>
+            <span class="py-12 mx-4 text-xs sm:text-base"
+              >x {creditPrice}FCFA</span
+            >
           </div>
         </form>
       </div>

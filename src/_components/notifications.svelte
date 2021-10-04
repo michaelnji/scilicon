@@ -9,7 +9,10 @@
   {#if $notifications}
     <section>
       {#each $notifications as notification (notification.id)}
-        <div class="m-3" animate:flip={{ duration: 500 }}>
+        <div
+          class="mx-12 my-4 notification z-50"
+          animate:flip={{ duration: 500 }}
+        >
           <Notification
             title={notification.title}
             type={notification.type}
@@ -37,5 +40,8 @@
     align-items: flex-end;
     justify-content: center;
     flex-direction: column;
+  }
+  .notification {
+    z-index: 1000 !important;
   }
 </style>

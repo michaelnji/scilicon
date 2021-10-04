@@ -84,7 +84,7 @@
             <div class="stat-value text-xl md:text-2xl">
               {accountInfo.totalAmountFromSales} <small>FCFA</small>
             </div>
-            <div class="stat-desc mt-2">10 Feb - 18 Mar</div>
+
             <div class="stat-actions">
               <a
                 href="/app/Stats"
@@ -100,7 +100,7 @@
           <div class="stat bg-base-100">
             <div class="stat-title">Current Product Stock</div>
             <div class="stat-value text-xl md:text-2xl">
-              {accountInfo.totalProductsStock - accountInfo.totalProductsSold}
+              {accountInfo.productsLeftInStock}
             </div>
             <div class="stat-actions">
               <a

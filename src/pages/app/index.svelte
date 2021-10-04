@@ -15,7 +15,7 @@
     });
     db.getOrSetItem("SC_THEME", "light");
     let generalAccount = {
-      capital: 50000,
+      capital: 0,
       currentAccountBalance: 0,
       totalProductsStock: 0,
       totalProductsSold: 0,
@@ -24,8 +24,6 @@
       projectedSales: 0,
       productsLeftInStock: 0,
       totalAmountFromSales: 0,
-      totalCredit: 0,
-      totalExpense: 0,
     };
     db.getOrSetItem("SC_GENERAL_ACCOUNT", generalAccount);
     db.getOrSetItem("PI", 0);

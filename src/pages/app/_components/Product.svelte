@@ -1,9 +1,7 @@
 <script>
   import products from "./../../../store/products.js";
   import { onMount } from "svelte";
-
   import { addToast } from "./../../../store/toast";
-  import { addNotification } from "./../../../store/notifications";
   import { fade, fly } from "svelte/transition";
   import db from "../../../scripts/dbManager";
   import _ from "underscore";
@@ -24,12 +22,12 @@
     totalUnits = amtInStock - amtleft;
   });
   function updateSales() {
-      if (totalPrice >= unitPrice * amtInStock) {
+    if (totalPrice >= unitPrice * amtInStock) {
       let message = ` ${productName}  sold out!!`;
       let timeout = 3000;
       let type = "warning";
-      let dismissable = true;
-      addToast({ message, type, dismissable, timeout });
+      let dismissible = true;
+      addToast({ message, type, dismissible, timeout });
       return;
     } else {
       totalPrice = totalPrice + unitPrice;
@@ -40,25 +38,28 @@
       currentProduct.totalUnitsSold = totalUnits;
       // updating account details
       let accountInfo = db.getItemValue("SC_GENERAL_ACCOUNT");
+      // add unit sold to current account balance
       accountInfo.currentAccountBalance =
         accountInfo.currentAccountBalance + unitPrice;
-
+      // add unit sold to total amount generated from sales
       accountInfo.totalAmountFromSales =
         accountInfo.totalAmountFromSales + unitPrice;
+      // reduce products left in stock by 1
       accountInfo.productsLeftInStock = accountInfo.productsLeftInStock - 1;
+      // increase total products sold by 1
       accountInfo.totalProductsSold = accountInfo.totalProductsSold + 1;
+      // calculate profit if total amount sold > capital
       if (accountInfo.totalAmountFromSales >= accountInfo.capital) {
         accountInfo.totalProfitMade =
           accountInfo.totalAmountFromSales - accountInfo.capital;
       }
+      // update info in localStorage
       db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
-
       products.update((value) => {
         return db.setItemValue("SC_PRODUCTS", [...allProducts, currentProduct]);
       });
     }
   }
-
 </script>
 
 <div

@@ -13,6 +13,10 @@
         db.getItemValue("SC_PRODUCTS").filter((e) => e.id !== id)
       );
     });
+    let accountInfo = db.getItemValue("SC_GENERAL_ACCOUNT");
+    accountInfo.productsLeftInStock =
+      accountInfo.productsLeftInStock - amtInStock;
+    db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
     let message = ` ${productName}  deleted`;
     let timeout = 2000;
     let type = "error";
@@ -57,9 +61,9 @@
       <span class="text-base-content  text-xl">{unitName} </span>
     </h2>
     <div class="flex justify-between mt-8">
-      <h2 class="capitalize font-bold text-base flex text-success">
-        <span class="text-base-content mr-1"> total(FCFA) :</span>
-        {totalPrice}FCFA
+      <h2 class="capitalize font-bold text-sm sm:text-base flex text-success">
+        <span class="text-base-content mr-1 "> total(FCFA) :</span>
+        {totalPrice}
       </h2>
 
       <div class="dropdown dropdown-top dropdown-left ">

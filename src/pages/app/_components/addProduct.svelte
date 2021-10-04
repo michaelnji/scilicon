@@ -1,4 +1,5 @@
 <script>
+  import { addNotification } from "./../../../store/notifications.js";
   import products from "./../../../store/products.js";
   import Icon from "./../../../_components/icon.svelte";
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
@@ -11,6 +12,7 @@
     isProductMeasurable,
     productCP,
     Products,
+    errorOccurred,
     subscribe;
   let isOpen = false;
   onMount(() => {
@@ -25,23 +27,37 @@
     isOpen = !isOpen;
   }
   function triggerSuccessEvent() {
-    pm.addProduct(
-      productName,
-      productAmt,
-      productUnitName,
-      productUnitPrice,
-      isProductMeasurable,
-      productCP,
-      Products
-    );
-    //  resetting data
-    productName = "";
-    productAmt = "";
-    productUnitName = "";
-    productUnitPrice = "";
-    isProductMeasurable = false;
-    productCP = "";
-    closeModal();
+    // basic form alidation
+    if (
+      productName == undefined ||
+      productAmt == undefined ||
+      productCP == undefined ||
+      productUnitPrice == undefined
+    ) {
+      errorOccurred = true;
+      setTimeout(() => {
+        errorOccurred = false;
+      }, 3500);
+    } else {
+      // adds product to localStorage
+      pm.addProduct(
+        productName,
+        productAmt,
+        productUnitName,
+        productUnitPrice,
+        isProductMeasurable,
+        productCP,
+        Products
+      );
+      //  resetting data
+      productName = "";
+      productAmt = "";
+      productUnitName = "";
+      productUnitPrice = "";
+      isProductMeasurable = false;
+      productCP = "";
+      closeModal();
+    }
   }
   function triggerCancelEvent() {
     //    oN Cancel
@@ -57,7 +73,7 @@
 >
 {#if isOpen}
   <div
-    class="w-screen h-screen hero-overlay left-0 fixed top-0 overflow-scroll grid place-items-center z-50 "
+    class="w-screen h-screen hero-overlay left-0 fixed top-0 overflow-scroll grid place-items-center  z-20"
     transition:fade={{ duration: 300 }}
   >
     <div
@@ -83,8 +99,9 @@
           <input
             placeholder="fish"
             bind:value={productName}
+            class:input-error={errorOccurred && productName == undefined}
             name="product name"
-            class="input input-bordered"
+            class="input input-bordered transition"
             type="text"
           />
         </div>
@@ -95,6 +112,7 @@
           <input
             placeholder="6000"
             bind:value={productCP}
+            class:input-error={errorOccurred && productCP == undefined}
             name="product cost price"
             class="input input-bordered"
             type="number"
@@ -109,7 +127,8 @@
               placeholder="00"
               bind:value={productAmt}
               name="Amount"
-              class="input input-bordered"
+              class:input-error={errorOccurred && productAmt == undefined}
+              class="input input-bordered transition"
               type="number"
             />
           </div>
@@ -121,7 +140,8 @@
               placeholder="10"
               name="unit price "
               bind:value={productUnitPrice}
-              class="input input-bordered"
+              class:input-error={errorOccurred && productUnitPrice == undefined}
+              class="input input-bordered transition"
               type="number"
             />
           </div>
@@ -132,8 +152,9 @@
             <input
               bind:value={productUnitName}
               placeholder="pieces"
+              class:input-error={errorOccurred && productUnitName == undefined}
               name="unit name"
-              class="input input-bordered"
+              class="input input-bordered transition"
               type="text"
             />
           </div>
