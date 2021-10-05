@@ -1,6 +1,6 @@
 <script>
   import Chart from "./../../../../_components/chart.svelte";
-  import Icon from "./../../../../_components/icon.svelte";
+  import nf from "../../../../scripts/numberFunctions";
   export let productName,
     values,
     totalPrice,
@@ -58,13 +58,13 @@
         <h2
           class="capitalize font-bold text-base flex text-base-content text-opacity-60"
         >
-          <span class="text-base-content mr-1"> CP: </span>
+          <span class="text-base-content mr-1"> Cost Price: </span>
           {totalPrice}FCFA
         </h2>
         <h2
           class="capitalize font-bold text-base flex text-base-content text-opacity-60"
         >
-          <span class="text-base-content mr-1"> SP: </span>
+          <span class="text-base-content mr-1"> Selling Price: </span>
           {totalPrice}FCFA
         </h2>
         <h2

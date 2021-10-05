@@ -1,6 +1,7 @@
 <script>
   import { fade } from "svelte/transition";
   import db from "../../../../scripts/dbManager";
+  import numberFunctions from "../../../../scripts/numberFunctions";
   import products from "../../../../store/products";
   import { addToast } from "../../../../store/toast";
   import Icon from "./../../../../_components/icon.svelte";
@@ -20,8 +21,8 @@
     let message = ` ${productName}  deleted`;
     let timeout = 2000;
     let type = "error";
-    let dismissable = false;
-    addToast({ message, type, dismissable, timeout });
+    let dismissible = false;
+    addToast({ message, type, dismissible, timeout });
   }
 </script>
 
@@ -47,7 +48,7 @@
         >unit price</span
       >
       <h2 class="capitalize text-info font-bold text-md">
-        {unitPrice}
+        {numberFunctions.formatNum(unitPrice)}
         FCFA
       </h2>
     </div>
@@ -57,13 +58,13 @@
       >Amount in stock</span
     >
     <h2 class="capitalize  font-extrabold text-3xl text-info mb-2 mt-0">
-      {amtInStock}
+      {numberFunctions.formatNum(amtInStock)}
       <span class="text-base-content  text-xl">{unitName} </span>
     </h2>
     <div class="flex justify-between mt-8">
       <h2 class="capitalize font-bold text-sm sm:text-base flex text-success">
         <span class="text-base-content mr-1 "> total(FCFA) :</span>
-        {totalPrice}
+        {numberFunctions.formatNum(totalPrice)}
       </h2>
 
       <div class="dropdown dropdown-top dropdown-left ">

@@ -8,7 +8,7 @@
   import AccountTable from "./_components/accountTable.svelte";
   import { metatags } from "@roxi/routify";
   import dbManager from "../../../scripts/dbManager";
-
+  import numberFunctions from "../../../scripts/numberFunctions.js";
   metatags.title = "Accounts";
   let accountInfo, subscribe, a;
   onMount(() => {
@@ -54,7 +54,8 @@
           <div class="stat">
             <div class="stat-title">Current Capital</div>
             <div class="stat-value text-xl md:text-2xl">
-              {accountInfo.capital} <small>FCFA</small>
+              {numberFunctions.formatNum(accountInfo.capital)}
+              <small>FCFA</small>
             </div>
             <div class="stat-actions">
               <ChangeCapital />
@@ -65,7 +66,8 @@
           <div class="stat">
             <div class="stat-title">Current Balance</div>
             <div class="stat-value text-xl md:text-2xl">
-              {accountInfo.currentAccountBalance} <small>FCFA</small>
+              {numberFunctions.formatNum(accountInfo.currentAccountBalance)}
+              <small>FCFA</small>
             </div>
           </div>
         </div>
@@ -73,8 +75,17 @@
           <div class="stat">
             <div class="stat-title">Current Profit</div>
             <div class="stat-value text-xl md:text-2xl">
-              {accountInfo.totalProfitMade}
+              {numberFunctions.formatNum(accountInfo.totalProfitMade)}
               <small>FCFA</small>
+            </div>
+          </div>
+        </div>
+        <div class="shadow stats">
+          <div class="stat">
+            <div class="stat-title">Total Products Sold</div>
+            <div class="stat-value text-xl md:text-2xl">
+              {numberFunctions.formatNum(accountInfo.totalProductsSold)}
+              <small>units</small>
             </div>
           </div>
         </div>
@@ -82,14 +93,15 @@
           <div class="stat">
             <div class="stat-title">Total Sales Made</div>
             <div class="stat-value text-xl md:text-2xl">
-              {accountInfo.totalAmountFromSales} <small>FCFA</small>
+              {numberFunctions.formatNum(accountInfo.totalAmountFromSales)}
+              <small>FCFA</small>
             </div>
 
             <div class="stat-actions">
               <a
                 href="/app/Stats"
                 class="flex items-center text-accent btn-link"
-                ><span class="mr-2">learn more</span><Icon
+                ><span class="mr-1">learn more</span><Icon
                   name="arrow-right-sm"
                 /></a
               >
@@ -100,13 +112,13 @@
           <div class="stat bg-base-100">
             <div class="stat-title">Current Product Stock</div>
             <div class="stat-value text-xl md:text-2xl">
-              {accountInfo.productsLeftInStock}
+              {numberFunctions.formatNum(accountInfo.productsLeftInStock)}
             </div>
             <div class="stat-actions">
               <a
                 href="/app/Products"
                 class="flex items-center text-accent btn-link"
-                ><span class="mr-2">see all products</span><Icon
+                ><span class="mr-1">see all products</span><Icon
                   name="arrow-right-sm"
                 /></a
               >

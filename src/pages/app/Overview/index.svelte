@@ -1,4 +1,5 @@
 <script>
+  import Icon from "./../../../_components/icon.svelte";
   import { fade, fly } from "svelte/transition";
   import ProductList from "./_components/productList.svelte";
   import TodayStats from "./../_components/todayStats.svelte";
@@ -15,13 +16,18 @@
   </h2>
 
   <ProductList />
-  <h2
-    class="text-base-content md:text-2xl text-xl font-bold  mt-8 text-opacity-80 capitalize"
-  >
-    statistics
-  </h2>
+  <div class="flex items-center  mt-12">
+    <h2
+      class="text-base-content md:text-2xl text-xl font-bold  text-opacity-80 capitalize"
+    >
+      statistics
+    </h2>
+    <a href="/app/Stats/" class="btn btn-link btn-secondary ml-4"
+      >see more <span class="ml-1"><Icon name="arrow-right-sm" /></span></a
+    >
+  </div>
 
-  <div class="grid grid-cols-1  lg:grid-cols-2 mt-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4">
     <TodayStats />
   </div>
 </div>

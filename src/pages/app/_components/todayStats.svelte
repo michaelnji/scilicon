@@ -45,7 +45,6 @@
     {:else}
       <div class="stat-value">0</div>
     {/if}
-    <div class="stat-desc text-error">↘︎ 17 (14%)</div>
   </div>
 </div>
 

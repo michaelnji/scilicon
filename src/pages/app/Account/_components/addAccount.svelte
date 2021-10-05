@@ -7,6 +7,7 @@
   import accounts from "../../../../store/account";
   import dbManager from "../../../../scripts/dbManager";
   import { addToast } from "../../../../store/toast";
+  import numberFunctions from "../../../../scripts/numberFunctions";
   let active, creditPrice, creditAmt, allProducts, creditName;
   creditPrice = 0;
   let isOpen = false;
@@ -154,7 +155,7 @@
                     class="badge badge-primary badge-sm transition duration-300 md:"
                     class:bg-neutral={active == product.id}
                     class:text-neutral-content={active == product.id}
-                    >{product.amtLeftForSale}</span
+                    >{numberFunctions.formatNum(product.amtLeftForSale)}</span
                   ></span
                 >
               {/each}
@@ -183,7 +184,7 @@
               />
             </div>
             <span class="py-12 mx-4 text-xs sm:text-base"
-              >x {creditPrice}FCFA</span
+              >x {numberFunctions.formatNum(creditPrice)}FCFA</span
             >
           </div>
         </form>

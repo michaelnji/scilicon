@@ -7,6 +7,7 @@
   import dbManager from "../../../../scripts/dbManager.js";
   import { addToast } from "../../../../store/toast.js";
   import { flip } from "svelte/animate";
+  import numberFunctions from "../../../../scripts/numberFunctions.js";
   export let source;
   let accountInfo, subscribe, accountTable, total;
   total = 0;
@@ -90,6 +91,10 @@
         e.name !==
         dbManager.getItemValue(source).filter((e) => e.id === id)[0].name
     );
+    if (accountInfo.totalAmountFromSales >= accountInfo.capital) {
+      accountInfo.totalProfitMade =
+        accountInfo.totalAmountFromSales - accountInfo.capital;
+    }
     //  updating all localStorage info
     dbManager.setItemValue("SC_PRODUCTS", [...products, product]);
     dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
@@ -129,7 +134,9 @@
                 ><Icon name="check" /></button
               ></td
             >
-            <td class="text-xs sm:text-base">{info.amount}</td>
+            <td class="text-xs sm:text-base"
+              >{numberFunctions.formatNum(info.amount)}</td
+            >
             <td class="text-xs sm:text-base">{info.date}</td>
           </tr>
         {/each}

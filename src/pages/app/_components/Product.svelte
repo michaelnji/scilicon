@@ -6,6 +6,7 @@
   import db from "../../../scripts/dbManager";
   import _ from "underscore";
   import Icon from "./../../../_components/icon.svelte";
+  import numberFunctions from "../../../scripts/numberFunctions.js";
   export let productName, unitName, unitPrice, amtInStock, id;
   let totalPrice = 0;
   let totalUnits;
@@ -89,19 +90,19 @@
         class="capitalize text-info font-bold text-md"
         in:fly={{ duration: 400, y: -100, delay: 600 }}
       >
-        +{totalUnits}
+        +{numberFunctions.formatNum(totalUnits)}
         {unitName}
       </h2>
     </div>
   </div>
   <div>
     <h2 class="capitalize  font-extrabold text-3xl text-info my-2">
-      +{totalPrice}
+      +{numberFunctions.formatNum(totalPrice)}
       <span class="text-base-content uppercase text-xl">fcfa</span>
     </h2>
     <div class="flex justify-between">
       <h2 class="capitalize font-bold text-base flex text-success">
-        {amtleft} left
+        {numberFunctions.formatNum(amtleft)} left
       </h2>
       <button
         class="btn btn-outline btn-primary capitalize btn-sm "
