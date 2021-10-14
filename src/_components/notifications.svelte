@@ -1,5 +1,5 @@
 <script>
-  import Notification from "./Notification.svelte";
+  import Notification from "./notification.svelte";
 
   import { dismissNotification, notifications } from "./../store/notifications";
   import { flip } from "svelte/animate";

@@ -1,5 +1,5 @@
 <script>
-  import Toast from "./Toast.svelte";
+  import Toast from "./toast.svelte";
 
   import { dismissToast, toasts } from "./../store/toast";
   import { fade } from "svelte/transition";
