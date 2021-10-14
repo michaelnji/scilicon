@@ -60,9 +60,7 @@
         Measurable
       </h2>
       {#if isMeasurableProducts.length >= 1}
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 mt-4 overflow-x-hidden w-full"
-        >
+        <div class="grid grid-cols-1  mt-4 overflow-x-hidden w-full">
           {#each isMeasurableProducts as product (product.id)}
             <div out:scale|local in:fade animate:flip={{ duration: 500 }}>
               <ProductCard
@@ -92,9 +90,7 @@
       </h2>
 
       {#if nonMeasurableProducts.length > 0}
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 mt-4 overflow-x-hidden w-full"
-        >
+        <div class="grid grid-cols-1 mt-4 overflow-x-hidden w-full">
           {#each nonMeasurableProducts as product (product.id)}
             <div out:scale|local in:fade animate:flip={{ duration: 500 }}>
               <ProductCard

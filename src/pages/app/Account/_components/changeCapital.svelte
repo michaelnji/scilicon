@@ -18,16 +18,19 @@
 
   function changeValue() {
     let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+    let archiveAccountInfo = dbManager.getItemValue("SC_ARCHIVE_ACCOUNT");
     accountInfo.capital = capitalAmt;
+    archiveAccountInfo.capital = capitalAmt;
     dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+    dbManager.setItemValue("SC_ARCHIVE_ACCOUNT", archiveAccountInfo);
     accounts.update((value) => {
       return [];
     });
     let message = `changed`;
     let timeout = 2000;
     let type = "success";
-    let dismissable = false;
-    addToast({ message, type, dismissable, timeout });
+    let dismissible = false;
+    addToast({ message, type, dismissible, timeout });
     capitalAmt = "";
     closeModal();
   }

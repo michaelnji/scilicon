@@ -2,13 +2,13 @@
   import Toast from "./Toast.svelte";
 
   import { dismissToast, toasts } from "./../store/toast";
-  import { flip } from "svelte/animate";
+  import { fade } from "svelte/transition";
 </script>
 
 {#if $toasts}
   <section>
     {#each $toasts as toast (toast.id)}
-      <div class="m-3" animate:flip={{ duration: 500 }}>
+      <div class="m-3" transition:fade={{ duration: 300 }}>
         <Toast
           type={toast.type}
           dismissible={toast.dismissible}

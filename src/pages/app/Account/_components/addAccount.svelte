@@ -38,37 +38,50 @@
     } else {
       // localStorage values which need to be updated
       let creditAccount = dbManager.getItemValue("SC_CREDIT_ACCOUNT");
+      let products, product;
+      // all products
+      products = dbManager.getItemValue("SC_PRODUCTS");
+      // current product
+      product = products.filter((e) => e.id === active)[0];
       let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+      let archiveAccountInfo = dbManager.getItemValue("SC_ARCHIVE_ACCOUNT");
       // new credit item
       let item = {};
       // only allow to borrow an amount which is <= amount which has already being sold
-      if (accountInfo.currentAccountBalance < creditAmt * creditPrice) {
-        let message = ` cannot borrow`;
-        let timeout = 4000;
+      if (
+        accountInfo.currentAccountBalance < creditAmt * creditPrice ||
+        creditAmt >= product.amtLeftForSale
+      ) {
+        let message = ` amount not available`;
+        let timeout = 2000;
         let type = "error";
         let dismissible = false;
         addToast({ message, type, dismissible, timeout });
       } else {
         // info for new credit item
         item.name = creditName ? creditName : "product";
-        item.date = timeFunctions.today();
+        item.date = timeFunctions.todayShort();
         item.id = uuidv4();
         item.amount = creditAmt * creditPrice;
-        let products, product;
-        // all products
-        products = dbManager.getItemValue("SC_PRODUCTS");
-        // current product
-        product = products.filter((e) => e.id === active)[0];
+
         // amount of borrowed products is deducted from amount of products left in that individual products account
         product.amtLeftForSale = product.amtLeftForSale - creditAmt;
         dbManager.setItemValue("SC_CREDIT_ACCOUNT", [...creditAccount, item]);
         // removing products borrowed from total product stock left for sale
         accountInfo.productsLeftInStock =
           accountInfo.productsLeftInStock - creditAmt;
+        archiveAccountInfo.productsLeftInStock =
+          archiveAccountInfo.productsLeftInStock - creditAmt;
+        // used by stats page
+        accountInfo.totalCredit =
+          accountInfo.totalCredit + creditAmt * creditPrice;
+        archiveAccountInfo.totalCredit =
+          archiveAccountInfo.totalCredit + creditAmt * creditPrice;
         // updating all localStorage values
         products = products.filter((e) => e.id !== active);
         dbManager.setItemValue("SC_PRODUCTS", [...products, product]);
         dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+        dbManager.setItemValue("SC_ARCHIVE_ACCOUNT", archiveAccountInfo);
         accounts.update((value) => {
           return [];
         });
@@ -134,12 +147,10 @@
                 >choose a product</span
               >
             {/if}
-            <div
-              class="grid md:grid-cols-3 sm:grid-cols-2  mt-2 grid-cols-1 gap-2"
-            >
+            <div class="grid sm:grid-cols-2  mt-2 grid-cols-1 gap-2">
               {#each allProducts as product}
                 <span
-                  class="text-primary bg-primary bg-opacity-20 capitalize  p-2  flex justify-between items-center rounded-full  cursor-pointer transition duration-500 ring ring-transparent backdrop-blur-sm"
+                  class="text-primary bg-primary bg-opacity-20 capitalize  p-2  flex justify-between items-center rounded-full  cursor-pointer transition duration-500 ring ring-transparent hover:bg-opacity-100 hover:text-primary-content backdrop-blur-sm"
                   class:ring-error={errorOccurred && creditName == undefined}
                   class:bg-opacity-100={active == product.id}
                   class:font-bold={active == product.id}

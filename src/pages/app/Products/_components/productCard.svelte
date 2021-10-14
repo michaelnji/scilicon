@@ -26,7 +26,7 @@
   }
 </script>
 
-<div class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 relative py-8">
+<div class="bg-base-100 rounded-lg mx-2 my-4 shadow-lg px-6 relative py-8">
   {#if amtInStock == 0}
     <span
       in:fade
@@ -71,7 +71,7 @@
         <button class="btn btn-ghost btn-primary capitalize btn-sm ">
           <Icon name="dots-horizontal" /></button
         >
-        <ul class="menu dropdown-content bg-base-200 shadow-lg rounded-box p-3">
+        <ul class="menu dropdown-content bg-base-200 shadow-lg rounded-md p-3">
           <li>
             <a href={"/app/stat/product/" + id} class="btn btn-ghost capitalize"
               >stats</a

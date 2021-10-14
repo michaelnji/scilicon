@@ -1,5 +1,5 @@
 <script>
-  import { fade, fly } from "svelte/transition";
+  import { fade } from "svelte/transition";
   import accounts from "./../../../../store/account.js";
   import { onDestroy, onMount } from "svelte";
   import _ from "underscore";
@@ -7,9 +7,9 @@
   import dbManager from "../../../../scripts/dbManager.js";
   import { addToast } from "../../../../store/toast.js";
   import { flip } from "svelte/animate";
-  import numberFunctions from "../../../../scripts/numberFunctions.js";
+  import nf from "../../../../scripts/numberFunctions.js";
   export let source;
-  let accountInfo, subscribe, accountTable, total;
+  let accountInfo, subscribe, accountTable, archiveAccountInfo, total;
   total = 0;
   let products, product;
   onMount(() => {
@@ -20,6 +20,7 @@
     });
     // all credit items
     accountInfo = dbManager.getItemValue(source);
+    archiveAccountInfo = dbManager.getItemValue("SC_ARCHIVE_ACCOUNT");
     // calculates the total amount taken as credit
     if (accountInfo.length > 0) {
       total = _.reduce(
@@ -40,6 +41,7 @@
   $: {
     if (accountTable) {
       accountInfo = dbManager.getItemValue(source);
+
       // recalculates the total amount borrowed
       if (accountInfo.length > 0) {
         total = _.reduce(
@@ -73,17 +75,27 @@
       .filter((e) => e.id === id)[0];
     // general account info
     let accountInfo = dbManager.getItemValue("SC_GENERAL_ACCOUNT");
+    let archiveAccountInfo = dbManager.getItemValue("SC_ARCHIVE_ACCOUNT");
     // amount paid is added to total amount generated from sale
     accountInfo.totalAmountFromSales =
       accountInfo.totalAmountFromSales +
+      dbManager.getItemValue(source).filter((e) => e.id === id)[0].amount;
+    archiveAccountInfo.totalAmountFromSales =
+      archiveAccountInfo.totalAmountFromSales +
       dbManager.getItemValue(source).filter((e) => e.id === id)[0].amount;
     // amount paid is added to current account balance
     accountInfo.currentAccountBalance =
       accountInfo.currentAccountBalance +
       dbManager.getItemValue(source).filter((e) => e.id === id)[0].amount;
+    archiveAccountInfo.currentAccountBalance =
+      archiveAccountInfo.currentAccountBalance +
+      dbManager.getItemValue(source).filter((e) => e.id === id)[0].amount;
     // amount of borrowed products is added to amount of products sold
     accountInfo.totalProductsSold =
       accountInfo.totalProductsSold + creditItem.amount / product.unitPrice;
+    archiveAccountInfo.totalProductsSold =
+      archiveAccountInfo.totalProductsSold +
+      creditItem.amount / product.unitPrice;
     // amount  borrowed is added to amount sold in that individual products account
     product.totalSold = product.totalSold + creditItem.amount;
     products = products.filter(
@@ -91,13 +103,17 @@
         e.name !==
         dbManager.getItemValue(source).filter((e) => e.id === id)[0].name
     );
-    if (accountInfo.totalAmountFromSales >= accountInfo.capital) {
+    if (product.totalSold >= product.costPrice) {
       accountInfo.totalProfitMade =
-        accountInfo.totalAmountFromSales - accountInfo.capital;
+        accountInfo.totalProfitMade + (product.totalSold - product.costPrice);
+      archiveAccountInfo.totalProfitMade =
+        archiveAccountInfo.totalProfitMade +
+        (product.totalSold - product.costPrice);
     }
     //  updating all localStorage info
     dbManager.setItemValue("SC_PRODUCTS", [...products, product]);
     dbManager.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+    dbManager.setItemValue("SC_ARCHIVE_ACCOUNT", archiveAccountInfo);
     dbManager.setItemValue(
       source,
       dbManager.getItemValue(source).filter((e) => e.id !== id)
@@ -134,9 +150,7 @@
                 ><Icon name="check" /></button
               ></td
             >
-            <td class="text-xs sm:text-base"
-              >{numberFunctions.formatNum(info.amount)}</td
-            >
+            <td class="text-xs sm:text-base">{nf.formatNum(info.amount)}</td>
             <td class="text-xs sm:text-base">{info.date}</td>
           </tr>
         {/each}
@@ -154,7 +168,8 @@
     <tr>
       <td class=" text-xs sm:text-base font-extrabold">TOTAL</td>
       <td class="text-xs sm:text-base" />
-      <td class="text-sm sm:text-xl text-primary font-extrabold">{total}fcfa</td
+      <td class="text-sm sm:text-xl text-primary font-extrabold"
+        >{nf.formatNum(total)}fcfa</td
       >
     </tr>
   </table>

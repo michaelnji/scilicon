@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="flex navbar justify-between items-center w-full fixed sm:py-4 px-4 py-2  z-10 bg-base-100 top-0 left-0 right-0 text-base-content rounded-b-box "
+  class="flex navbar justify-between items-center w-full fixed sm:py-4 px-4 py-2  z-10 bg-base-100 top-0 left-0 right-0 text-base-content rounded-b-box shadow-md"
 >
   <Sidebar />
   <div class="flex md:fixed md:right-5 md:top-2">
@@ -21,13 +21,13 @@
         class="p-2 shadow-lg menu dropdown-content bg-base-100 rounded-box w-52 min-w-max"
       >
         <li>
-          <a>Item 1</a>
+          <a href='/'>Item 1</a>
         </li>
         <li>
-          <a>Item 2</a>
+          <a href='/'>Item 2</a>
         </li>
         <li>
-          <a>Item 3</a>
+          <a href='/'>Item 3</a>
         </li>
       </ul>
     </div>

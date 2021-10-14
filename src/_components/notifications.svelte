@@ -16,10 +16,10 @@
           <Notification
             title={notification.title}
             type={notification.type}
+            message={notification.message}
             dismissible={notification.dismissible}
             on:dismissNot={() => dismissNotification(notification.id)}
-            >{notification.message}</Notification
-          >
+          />
         </div>
       {/each}
     </section>

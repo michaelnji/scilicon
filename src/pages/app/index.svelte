@@ -6,7 +6,7 @@
   import db from "../../scripts/dbManager";
   import { onMount } from "svelte";
   // initializing app variables in localStorage
-  let varNames = ["SC_PRODUCTS", "SC_ACCOUNT_MONTHS", "SC_ACCOUNTS_WEEK"];
+  let varNames = ["SC_PRODUCTS", "SC_CREDIT_ACCOUNT"];
   onMount(() => {
     let randTime = Math.ceil(Math.random() * 13000 + 1);
     randTime = randTime > 3500 ? randTime : 5500;
@@ -20,17 +20,21 @@
       totalProductsStock: 0,
       totalProductsSold: 0,
       totalProfitMade: 0,
+      totalCredit: 0,
       projectedProfit: 0,
       projectedSales: 0,
       productsLeftInStock: 0,
       totalAmountFromSales: 0,
     };
+    let archive = {
+      today: {},
+      data: [],
+    };
     db.getOrSetItem("SC_GENERAL_ACCOUNT", generalAccount);
+    db.getOrSetItem("SC_ARCHIVE_ACCOUNT", generalAccount);
     db.getOrSetItem("PI", 0);
-    db.getOrSetItem("SC_ACCOUNT_ARCHIVE_DAY", []);
-    db.getOrSetItem("SC_CREDIT_ACCOUNT", []);
-    db.getOrSetItem("SC_ACCOUNT_ARCHIVE_WEEK", []);
-    db.getOrSetItem("SC_ACCOUNT_ARCHIVE_MONTH", []);
+
+    db.getOrSetItem("SC_ARCHIVE", archive);
     //  updating all stores
     products.update((value) => {
       return db.getItemValue("SC_PRODUCTS");

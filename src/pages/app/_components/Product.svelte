@@ -39,23 +39,36 @@
       currentProduct.totalUnitsSold = totalUnits;
       // updating account details
       let accountInfo = db.getItemValue("SC_GENERAL_ACCOUNT");
+      let archiveAccountInfo = db.getItemValue("SC_ARCHIVE_ACCOUNT");
       // add unit sold to current account balance
       accountInfo.currentAccountBalance =
         accountInfo.currentAccountBalance + unitPrice;
+      archiveAccountInfo.currentAccountBalance =
+        archiveAccountInfo.currentAccountBalance + unitPrice;
       // add unit sold to total amount generated from sales
       accountInfo.totalAmountFromSales =
         accountInfo.totalAmountFromSales + unitPrice;
+      archiveAccountInfo.totalAmountFromSales =
+        archiveAccountInfo.totalAmountFromSales + unitPrice;
       // reduce products left in stock by 1
+      archiveAccountInfo.productsLeftInStock =
+        archiveAccountInfo.productsLeftInStock - 1;
       accountInfo.productsLeftInStock = accountInfo.productsLeftInStock - 1;
       // increase total products sold by 1
       accountInfo.totalProductsSold = accountInfo.totalProductsSold + 1;
+      archiveAccountInfo.totalProductsSold =
+        archiveAccountInfo.totalProductsSold + 1;
       // calculate profit if total amount sold > capital
-      if (accountInfo.totalAmountFromSales >= accountInfo.capital) {
+      if (totalPrice >= currentProduct.costPrice && amtleft == 0) {
         accountInfo.totalProfitMade =
-          accountInfo.totalAmountFromSales - accountInfo.capital;
+          accountInfo.totalProfitMade + (totalPrice - currentProduct.costPrice);
+        archiveAccountInfo.totalProfitMade =
+          archiveAccountInfo.totalProfitMade +
+          (totalPrice - currentProduct.costPrice);
       }
       // update info in localStorage
       db.setItemValue("SC_GENERAL_ACCOUNT", accountInfo);
+      db.setItemValue("SC_ARCHIVE_ACCOUNT", archiveAccountInfo);
       products.update((value) => {
         return db.setItemValue("SC_PRODUCTS", [...allProducts, currentProduct]);
       });
@@ -64,7 +77,7 @@
 </script>
 
 <div
-  class="bg-base-100 rounded-box mx-2 my-4 shadow-lg px-3 pt-8 py-4 relative"
+  class="bg-base-100 rounded-2xl mx-2 my-4 shadow-lg px-6 pt-8 py-4 relative"
 >
   {#if totalPrice >= unitPrice * amtInStock}
     <span
